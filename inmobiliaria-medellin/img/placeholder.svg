@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Imagen no disponible">
+  <rect width="800" height="600" fill="#e9e1d3"/>
+  <g fill="none" stroke="#1f3d2f" stroke-width="10" stroke-linejoin="round" opacity=".55">
+    <path d="M250 330 L400 210 L550 330"/>
+    <path d="M285 305 V420 H515 V305"/>
+    <path d="M375 420 V350 H425 V420"/>
+  </g>
+  <text x="400" y="480" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1f3d2f" opacity=".6">Casa Aburrá</text>
+</svg>
