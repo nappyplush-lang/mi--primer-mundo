@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="El Oskar — Restaurante de comida criolla tradicional. Sabor de casa en cada plato.">
+  <meta name="theme-color" content="#8b2e1f">
+  <title>El Oskar | Comida Criolla</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== Navegación ===== -->
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="#inicio" class="logo">El <span>Oskar</span></a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#inicio" class="nav-link">Inicio</a></li>
+        <li><a href="#menu" class="nav-link">Menú</a></li>
+        <li><a href="#nosotros" class="nav-link">Nosotros</a></li>
+        <li><a href="#contacto" class="nav-link">Contacto</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===== Inicio ===== -->
+    <section class="hero" id="inicio">
+      <div class="hero-overlay"></div>
+      <div class="hero-content container">
+        <p class="hero-tag">Cocina criolla tradicional</p>
+        <h1 class="hero-title">El sabor de casa,<br><em>servido con alma criolla</em></h1>
+        <p class="hero-text">Recetas de la abuela, ingredientes frescos y el cariño de siempre. En El Oskar cada plato cuenta una historia.</p>
+        <div class="hero-buttons">
+          <a href="#menu" class="btn btn-primary">Ver menú</a>
+          <a href="#contacto" class="btn btn-outline">Reservar</a>
+        </div>
+      </div>
+      <a href="#menu" class="scroll-down" aria-label="Bajar al menú">&#8595;</a>
+    </section>
+
+    <!-- ===== Menú ===== -->
+    <section class="section menu" id="menu">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Nuestra carta</p>
+          <h2 class="section-title">Platos de la casa</h2>
+          <div class="divider"><span></span></div>
+        </div>
+
+        <div class="menu-grid">
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🥩</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Lomo Saltado</h3>
+                <span class="price">S/ 32.00</span>
+              </div>
+              <p>Jugosos trozos de lomo salteados al wok con cebolla, tomate y ají, acompañado de papas fritas y arroz.</p>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🍗</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Ají de Gallina</h3>
+                <span class="price">S/ 26.00</span>
+              </div>
+              <p>Gallina deshilachada en cremosa salsa de ají amarillo, con papa, huevo, aceituna y arroz blanco.</p>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🍚</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Arroz con Pollo</h3>
+                <span class="price">S/ 24.00</span>
+              </div>
+              <p>Arroz verde al culantro con presa de pollo dorada y salsa criolla fresca de cebolla y limón.</p>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🐟</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Ceviche Clásico</h3>
+                <span class="price">S/ 30.00</span>
+              </div>
+              <p>Pescado fresco del día marinado en limón, ají limo y cebolla morada, con camote y choclo.</p>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🥔</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Papa a la Huancaína</h3>
+                <span class="price">S/ 15.00</span>
+              </div>
+              <p>Papa amarilla bañada en salsa de queso fresco y ají amarillo, con huevo y aceituna de botija.</p>
+            </div>
+          </article>
+
+          <article class="menu-card reveal">
+            <div class="menu-icon" aria-hidden="true">🍇</div>
+            <div class="menu-info">
+              <div class="menu-top">
+                <h3>Chicha Morada</h3>
+                <span class="price">S/ 10.00</span>
+              </div>
+              <p>Jarra de bebida tradicional de maíz morado con piña, canela, clavo y un toque de limón.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Sobre nosotros ===== -->
+    <section class="section about" id="nosotros">
+      <div class="container about-grid">
+        <div class="about-visual reveal">
+          <div class="about-badge">
+            <strong>+20</strong>
+            <span>años de sazón</span>
+          </div>
+          <div class="about-pattern" aria-hidden="true">🍲</div>
+        </div>
+
+        <div class="about-text reveal">
+          <p class="section-tag">Sobre nosotros</p>
+          <h2 class="section-title">Una familia, una tradición</h2>
+          <p>El Oskar nació en la cocina de nuestra familia, donde los domingos se juntaban todos alrededor de la mesa. Esas recetas, guardadas con cariño por generaciones, hoy las compartimos contigo.</p>
+          <p>Cocinamos a fuego lento, con ingredientes frescos del mercado y el mismo amor de siempre. Aquí no eres un cliente: eres parte de la familia.</p>
+
+          <ul class="about-features">
+            <li><span>🌶️</span> Recetas auténticas</li>
+            <li><span>🧺</span> Ingredientes frescos</li>
+            <li><span>❤️</span> Atención familiar</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contacto ===== -->
+    <section class="section contact" id="contacto">
+      <div class="container">
+        <div class="section-header">
+          <p class="section-tag">Contacto</p>
+          <h2 class="section-title">Haz tu pedido o reserva</h2>
+          <div class="divider"><span></span></div>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info reveal">
+            <div class="info-item">
+              <span class="info-icon">📍</span>
+              <div>
+                <h4>Dirección</h4>
+                <p>Av. Principal 123, Centro</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">🕒</span>
+              <div>
+                <h4>Horario</h4>
+                <p>Lunes a Domingo<br>12:00 p.m. – 10:00 p.m.</p>
+              </div>
+            </div>
+            <div class="info-item">
+              <span class="info-icon">📞</span>
+              <div>
+                <h4>WhatsApp</h4>
+                <p id="phoneText">+51 999 999 999</p>
+              </div>
+            </div>
+
+            <a href="#" class="btn btn-whatsapp" id="whatsappDirect" target="_blank" rel="noopener">
+              <svg viewBox="0 0 32 32" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.5L3 29l6.7-1.7c1.9 1 4.1 1.6 6.3 1.6 7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-4-.5-5.7-1.6l-.4-.2-4 1 1.1-3.9-.3-.4C5.6 19.9 5 18 5 16 5 9.9 9.9 5 16 5s11 4.9 11 11-4.9 10.7-11 10.7zm6-8c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.9 1.1 3.4.9 4 .8.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
+              Escríbenos por WhatsApp
+            </a>
+          </div>
+
+          <form class="contact-form reveal" id="contactForm" novalidate>
+            <h3>Envíanos un mensaje</h3>
+            <div class="form-group">
+              <label for="nombre">Nombre</label>
+              <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label for="tipo">¿Qué deseas?</label>
+              <select id="tipo" name="tipo">
+                <option value="Hacer un pedido">Hacer un pedido</option>
+                <option value="Reservar una mesa">Reservar una mesa</option>
+                <option value="Hacer una consulta">Hacer una consulta</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="mensaje">Mensaje</label>
+              <textarea id="mensaje" name="mensaje" rows="4" placeholder="Ej: Quiero 2 lomos saltados para las 8 p.m." required></textarea>
+            </div>
+            <p class="form-error" id="formError" role="alert"></p>
+            <button type="submit" class="btn btn-primary btn-full">Enviar por WhatsApp</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== Pie de página ===== -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <a href="#inicio" class="logo">El <span>Oskar</span></a>
+      <p>Comida criolla con sabor de casa.</p>
+      <p class="copy">&copy; <span id="year"></span> El Oskar. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="#" class="whatsapp-float" id="whatsappFloat" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+    <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><path fill="currentColor" d="M16 3C8.8 3 3 8.8 3 16c0 2.3.6 4.5 1.7 6.5L3 29l6.7-1.7c1.9 1 4.1 1.6 6.3 1.6 7.2 0 13-5.8 13-13S23.2 3 16 3zm0 23.7c-2 0-4-.5-5.7-1.6l-.4-.2-4 1 1.1-3.9-.3-.4C5.6 19.9 5 18 5 16 5 9.9 9.9 5 16 5s11 4.9 11 11-4.9 10.7-11 10.7zm6-8c-.3-.2-1.9-1-2.2-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-1.9-1.8-2.2-.2-.3 0-.5.1-.7l.5-.6c.2-.2.2-.3.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.5c.2.2 2.4 3.7 5.8 5.1 2.9 1.1 3.4.9 4 .8.6-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg>
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
