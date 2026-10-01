@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es-CO">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ===== SEO básico ===== -->
+  <title>Casa Aburrá | Bienes raíces en Medellín – Apartamentos, casas y fincas</title>
+  <meta name="description" content="Compra o arrienda apartamentos, casas y fincas en El Poblado, Laureles, Envigado, Sabaneta, Belén y Provenza. Asesoría legal y acompañamiento para colombianos y extranjeros.">
+  <meta name="keywords" content="bienes raíces Medellín, apartamentos El Poblado, arriendo Laureles, casas Envigado, fincas Antioquia, inversión extranjeros Colombia">
+  <meta name="theme-color" content="#1f3d2f">
+  <!-- Cambia esta URL por la de tu dominio cuando publiques -->
+  <link rel="canonical" href="https://tu-dominio.com/">
+
+  <!-- ===== Open Graph (vista previa al compartir en WhatsApp, Facebook, etc.) ===== -->
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_CO">
+  <meta property="og:site_name" content="Casa Aburrá Inmobiliaria">
+  <meta property="og:title" content="Casa Aburrá | Bienes raíces en Medellín">
+  <meta property="og:description" content="Apartamentos, casas y fincas en los mejores barrios de Medellín y el Valle de Aburrá. Te acompañamos de principio a fin.">
+  <meta property="og:url" content="https://tu-dominio.com/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1599413987323-b2b8c0d7d9c8?auto=format&fit=crop&w=1200&h=630&q=80">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <!-- ===== Google Fonts: serif para títulos, sans para texto ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Marca que JS está activo (las animaciones solo se aplican si JS funciona) -->
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+
+  <!-- ======================= 1. HEADER ======================= -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#inicio" class="logo" aria-label="Casa Aburrá, ir al inicio">
+        <img src="img/favicon.svg" alt="" width="36" height="36">
+        <span class="logo__text">Casa <strong>Aburrá</strong></span>
+      </a>
+
+      <nav class="nav" id="nav" aria-label="Menú principal">
+        <ul class="nav__list">
+          <li><a href="#inicio" class="nav__link">Inicio</a></li>
+          <li><a href="#propiedades" class="nav__link">Propiedades</a></li>
+          <li><a href="#barrios" class="nav__link">Barrios</a></li>
+          <li><a href="#nosotros" class="nav__link">Nosotros</a></li>
+          <li><a href="#contacto" class="nav__link">Contacto</a></li>
+        </ul>
+        <a href="#" class="btn btn--whatsapp nav__cta" data-whatsapp target="_blank" rel="noopener">
+          <svg class="icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
+          WhatsApp
+        </a>
+      </nav>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- ======================= 2. HERO ======================= -->
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <!-- Imagen de fondo. Puedes reemplazarla por una foto propia en /img (ej: img/medellin.jpg) -->
+      <img class="hero__bg"
+           src="https://images.unsplash.com/photo-1599413987323-b2b8c0d7d9c8?auto=format&fit=crop&w=1920&q=75"
+           alt="Vista panorámica de Medellín y las montañas del Valle de Aburrá"
+           data-fallback="hide">
+      <div class="hero__overlay"></div>
+
+      <div class="container hero__content">
+        <p class="eyebrow eyebrow--light">Inmobiliaria en Medellín · Valle de Aburrá</p>
+        <h1 class="hero__title" id="hero-title">Encuentra tu lugar en la <em>ciudad de la eterna primavera</em></h1>
+        <p class="hero__subtitle">Apartamentos, casas y fincas seleccionadas en los mejores barrios, con asesoría legal y acompañamiento de principio a fin.</p>
+
+        <!-- Buscador: al enviarlo aplica los filtros de la sección Propiedades -->
+        <form class="search" id="heroSearch" aria-label="Buscar propiedades">
+          <div class="search__field">
+            <label for="hs-tipo">Tipo</label>
+            <select id="hs-tipo" name="tipo">
+              <option value="">Todos</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="casa">Casa</option>
+              <option value="finca">Finca</option>
+            </select>
+          </div>
+          <div class="search__field">
+            <label for="hs-operacion">Operación</label>
+            <select id="hs-operacion" name="operacion">
+              <option value="">Comprar o arrendar</option>
+              <option value="venta">Comprar</option>
+              <option value="arriendo">Arrendar</option>
+            </select>
+          </div>
+          <div class="search__field">
+            <label for="hs-barrio">Barrio</label>
+            <select id="hs-barrio" name="barrio" data-barrios>
+              <option value="">Todos los barrios</option>
+            </select>
+          </div>
+          <div class="search__field">
+            <label for="hs-precio">Precio</label>
+            <select id="hs-precio" name="precio" data-precios>
+              <option value="">Cualquier precio</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn--gold search__btn">
+            <svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>
+            Buscar
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ======================= 3. PROPIEDADES ======================= -->
+    <section class="section" id="propiedades" aria-labelledby="prop-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow">Propiedades destacadas</p>
+          <h2 class="section__title" id="prop-title">Inmuebles seleccionados para ti</h2>
+          <p class="section__lead">Cada propiedad ha sido visitada y verificada por nuestro equipo.</p>
+        </header>
+
+        <!-- Filtros (se sincronizan con el buscador del hero) -->
+        <form class="filters reveal" id="filters" aria-label="Filtrar propiedades">
+          <div class="filters__group" role="group" aria-label="Operación">
+            <button type="button" class="chip is-active" data-operacion="">Todas</button>
+            <button type="button" class="chip" data-operacion="venta">En venta</button>
+            <button type="button" class="chip" data-operacion="arriendo">En arriendo</button>
+          </div>
+          <div class="filters__selects">
+            <label class="sr-only" for="f-tipo">Tipo de inmueble</label>
+            <select id="f-tipo" name="tipo">
+              <option value="">Todos los tipos</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="casa">Casa</option>
+              <option value="finca">Finca</option>
+            </select>
+            <label class="sr-only" for="f-barrio">Barrio</label>
+            <select id="f-barrio" name="barrio" data-barrios>
+              <option value="">Todos los barrios</option>
+            </select>
+            <label class="sr-only" for="f-precio">Rango de precio</label>
+            <select id="f-precio" name="precio" data-precios>
+              <option value="">Cualquier precio</option>
+            </select>
+            <button type="reset" class="btn btn--ghost btn--sm" id="resetFilters">Limpiar</button>
+          </div>
+        </form>
+
+        <p class="results-count" id="resultsCount" aria-live="polite"></p>
+
+        <!-- Las tarjetas se generan desde el array PROPIEDADES en js/main.js -->
+        <div class="properties" id="propertiesGrid"></div>
+
+        <div class="empty" id="emptyState" hidden>
+          <p><strong>No encontramos propiedades con esos filtros.</strong></p>
+          <p>Cuéntanos qué buscas y te enviamos opciones que aún no están publicadas.</p>
+          <a href="#contacto" class="btn btn--primary btn--sm">Hablar con un asesor</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 4. BARRIOS ======================= -->
+    <section class="section section--beige" id="barrios" aria-labelledby="barrios-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow">Barrios</p>
+          <h2 class="section__title" id="barrios-title">Conoce dónde vivir en Medellín</h2>
+          <p class="section__lead">Cada zona tiene su propio ritmo. Te ayudamos a elegir la que va con tu estilo de vida.</p>
+        </header>
+
+        <div class="barrios">
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=70" alt="Edificios residenciales modernos rodeados de vegetación, similares a El Poblado" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>El Poblado</h3>
+              <p>El sector más exclusivo de la ciudad: torres modernas, zonas verdes, centros comerciales y la mejor oferta gastronómica.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="El Poblado">Ver propiedades →</button>
+            </div>
+          </article>
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=800&q=70" alt="Casa tradicional con jardín, al estilo de Laureles" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>Laureles</h3>
+              <p>Calles arborizadas, circulares y casas amplias. Tranquilo, plano y caminable, con cafés y vida de barrio.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="Laureles">Ver propiedades →</button>
+            </div>
+          </article>
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=70" alt="Casa moderna con jardín, representativa de Envigado" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>Envigado</h3>
+              <p>Ambiente familiar, excelente calidad de vida y acceso rápido a la naturaleza en el Alto de Las Palmas.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="Envigado">Ver propiedades →</button>
+            </div>
+          </article>
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=800&q=70" alt="Conjunto residencial de apartamentos con balcones, como los de Sabaneta" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>Sabaneta</h3>
+              <p>El municipio más pequeño de Colombia y uno de los de mayor crecimiento: proyectos nuevos y buena valorización.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="Sabaneta">Ver propiedades →</button>
+            </div>
+          </article>
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=800&q=70" alt="Cocina iluminada de un apartamento familiar, como los de Belén" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>Belén</h3>
+              <p>Residencial y bien conectado, con parques, comercio de barrio y precios competitivos para vivir o invertir.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="Belén">Ver propiedades →</button>
+            </div>
+          </article>
+          <article class="barrio reveal">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=70" alt="Apartamento moderno y luminoso, al estilo de Provenza" loading="lazy" data-fallback>
+            <div class="barrio__body">
+              <h3>Provenza</h3>
+              <p>El corazón creativo y nocturno de El Poblado: diseño, restaurantes y alta demanda para renta corta.</p>
+              <button type="button" class="barrio__link" data-barrio-filter="Provenza">Ver propiedades →</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 5. POR QUÉ ELEGIRNOS ======================= -->
+    <section class="section section--dark" id="nosotros" aria-labelledby="nosotros-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow eyebrow--light">Por qué elegirnos</p>
+          <h2 class="section__title" id="nosotros-title">Más de 12 años conectando personas con su hogar</h2>
+          <p class="section__lead">Somos un equipo paisa de asesores, abogados y arquitectos. Nos importa que tomes la mejor decisión, no solo cerrar un negocio.</p>
+        </header>
+
+        <div class="features">
+          <article class="feature reveal">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-shield"></use></svg></span>
+            <h3>Asesoría legal</h3>
+            <p>Estudio de títulos, revisión de certificados de libertad y promesas de compraventa sin sorpresas.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-handshake"></use></svg></span>
+            <h3>Acompañamiento total</h3>
+            <p>Desde la primera visita hasta la entrega de llaves: negociación, notaría, crédito y mudanza.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-globe"></use></svg></span>
+            <h3>Inversión para extranjeros</h3>
+            <p>Te guiamos en el registro de inversión ante el Banco de la República, cuentas y visa de inversionista. Atención en inglés.</p>
+          </article>
+          <article class="feature reveal">
+            <span class="feature__icon"><svg class="icon" aria-hidden="true"><use href="#icon-chart"></use></svg></span>
+            <h3>Gestión de rentas</h3>
+            <p>Administramos tu propiedad: arrendatarios verificados, cobros, mantenimiento y reportes mensuales.</p>
+          </article>
+        </div>
+
+        <ul class="stats reveal" aria-label="Cifras de Casa Aburrá">
+          <li><strong>+850</strong><span>familias atendidas</span></li>
+          <li><strong>12</strong><span>años en Medellín</span></li>
+          <li><strong>+120</strong><span>clientes extranjeros</span></li>
+          <li><strong>4,9★</strong><span>calificación promedio</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================= 6. TESTIMONIOS ======================= -->
+    <section class="section" id="testimonios" aria-labelledby="testimonios-title">
+      <div class="container">
+        <header class="section__head reveal">
+          <p class="eyebrow">Testimonios</p>
+          <h2 class="section__title" id="testimonios-title">Lo que dicen nuestros clientes</h2>
+        </header>
+
+        <div class="testimonials">
+          <figure class="testimonial reveal">
+            <div class="testimonial__stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <blockquote>“Compramos nuestro primer apartamento en Laureles. Nos explicaron cada documento y el crédito salió sin contratiempos. Súper recomendados.”</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">LM</span>
+              <span><strong>Laura y Mateo</strong><small>Compradores · Laureles</small></span>
+            </figcaption>
+          </figure>
+          <figure class="testimonial reveal">
+            <div class="testimonial__stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <blockquote>“Desde Canadá invertí en un apartamento en Provenza sin viajar. Se encargaron del registro de la inversión y hoy administran la renta.”</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">JR</span>
+              <span><strong>James R.</strong><small>Inversionista · Provenza</small></span>
+            </figcaption>
+          </figure>
+          <figure class="testimonial reveal">
+            <div class="testimonial__stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <blockquote>“Arrendé mi casa en Envigado en menos de tres semanas, con inquilinos estudiados y contrato claro. Atención impecable.”</blockquote>
+            <figcaption>
+              <span class="avatar" aria-hidden="true">CG</span>
+              <span><strong>Claudia Gómez</strong><small>Propietaria · Envigado</small></span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= 7. CONTACTO ======================= -->
+    <section class="section section--beige" id="contacto" aria-labelledby="contacto-title">
+      <div class="container contact">
+        <div class="contact__info reveal">
+          <p class="eyebrow">Contacto</p>
+          <h2 class="section__title" id="contacto-title">Hablemos de tu próxima propiedad</h2>
+          <p>Déjanos tus datos y un asesor te contactará en menos de 24 horas hábiles. Si prefieres, escríbenos directo por WhatsApp.</p>
+          <ul class="contact__list">
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-pin"></use></svg> Cra. 43A #1-50, Of. 1204, El Poblado, Medellín</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-phone"></use></svg> <a href="tel:+573001234567">+57 300 123 4567</a></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-mail"></use></svg> <a href="mailto:hola@casaaburra.co">hola@casaaburra.co</a></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg> Lunes a viernes 8:00–18:00 · Sábados 9:00–13:00</li>
+          </ul>
+          <a href="#" class="btn btn--whatsapp" data-whatsapp target="_blank" rel="noopener">
+            <svg class="icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
+            Escribir por WhatsApp
+          </a>
+        </div>
+
+        <!-- name + data-netlify permiten recibir los envíos gratis si despliegas en Netlify -->
+        <form class="form reveal" id="contactForm" name="contacto" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+          <input type="hidden" name="form-name" value="contacto">
+          <p class="sr-only"><label>No llenar: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+
+          <div class="form__field">
+            <label for="nombre">Nombre completo</label>
+            <input id="nombre" name="nombre" type="text" autocomplete="name" required>
+            <small class="form__error" id="nombre-error" aria-live="polite"></small>
+          </div>
+          <div class="form__row">
+            <div class="form__field">
+              <label for="email">Correo electrónico</label>
+              <input id="email" name="email" type="email" autocomplete="email" required>
+              <small class="form__error" id="email-error" aria-live="polite"></small>
+            </div>
+            <div class="form__field">
+              <label for="telefono">Teléfono / WhatsApp</label>
+              <input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="300 123 4567" required>
+              <small class="form__error" id="telefono-error" aria-live="polite"></small>
+            </div>
+          </div>
+          <div class="form__field">
+            <label for="mensaje">¿Qué estás buscando?</label>
+            <textarea id="mensaje" name="mensaje" rows="5" placeholder="Ej: apartamento de 2 habitaciones en Laureles para comprar, presupuesto hasta 600 millones." required></textarea>
+            <small class="form__error" id="mensaje-error" aria-live="polite"></small>
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">Enviar mensaje</button>
+          <p class="form__status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================= 8. FOOTER ======================= -->
+  <footer class="footer">
+    <div class="container footer__grid">
+      <div>
+        <a href="#inicio" class="logo logo--light" aria-label="Casa Aburrá, ir al inicio">
+          <img src="img/favicon.svg" alt="" width="36" height="36">
+          <span class="logo__text">Casa <strong>Aburrá</strong></span>
+        </a>
+        <p class="footer__text">Inmobiliaria boutique en Medellín. Compra, venta, arriendo y administración de propiedades en el Valle de Aburrá.</p>
+        <ul class="social" aria-label="Redes sociales">
+          <li><a href="https://instagram.com/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="icon" aria-hidden="true"><use href="#icon-instagram"></use></svg></a></li>
+          <li><a href="https://facebook.com/" target="_blank" rel="noopener" aria-label="Facebook"><svg class="icon" aria-hidden="true"><use href="#icon-facebook"></use></svg></a></li>
+          <li><a href="https://tiktok.com/" target="_blank" rel="noopener" aria-label="TikTok"><svg class="icon" aria-hidden="true"><use href="#icon-tiktok"></use></svg></a></li>
+          <li><a href="https://linkedin.com/" target="_blank" rel="noopener" aria-label="LinkedIn"><svg class="icon" aria-hidden="true"><use href="#icon-linkedin"></use></svg></a></li>
+        </ul>
+      </div>
+      <nav aria-label="Enlaces del pie de página">
+        <h3 class="footer__title">Explora</h3>
+        <ul class="footer__links">
+          <li><a href="#propiedades">Propiedades</a></li>
+          <li><a href="#barrios">Barrios</a></li>
+          <li><a href="#nosotros">Nosotros</a></li>
+          <li><a href="#testimonios">Testimonios</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </nav>
+      <address class="footer__contact">
+        <h3 class="footer__title">Visítanos</h3>
+        <p>Cra. 43A #1-50, Of. 1204<br>El Poblado, Medellín, Antioquia</p>
+        <p><a href="tel:+573001234567">+57 300 123 4567</a><br><a href="mailto:hola@casaaburra.co">hola@casaaburra.co</a></p>
+        <a href="#" class="btn btn--whatsapp btn--sm" data-whatsapp target="_blank" rel="noopener">
+          <svg class="icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
+          WhatsApp
+        </a>
+      </address>
+    </div>
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> Casa Aburrá Inmobiliaria. Todos los derechos reservados.</p>
+      <p>Precios en pesos colombianos (COP), sujetos a cambios sin previo aviso.</p>
+    </div>
+  </footer>
+
+  <!-- Botón flotante de WhatsApp -->
+  <a href="#" class="wa-float" data-whatsapp target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+    <svg class="icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg>
+  </a>
+
+  <!-- ===== Iconos SVG reutilizables (se usan con <use href="#icon-...">) ===== -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="icon-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.25-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.5h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.75-.72 2-1.41.25-.69.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.31l-.34-.2-3.56.93.95-3.47-.22-.36a9.42 9.42 0 0 1-1.44-5.02c0-5.2 4.24-9.43 9.45-9.43a9.4 9.4 0 0 1 9.42 9.44c0 5.2-4.23 9.43-9.44 9.43m8.03-17.46A11.27 11.27 0 0 0 12.05.7C5.8.7.7 5.79.7 12.05c0 2 .52 3.95 1.52 5.67L.6 23.6l6.01-1.58a11.33 11.33 0 0 0 5.43 1.38h.01c6.25 0 11.35-5.09 11.35-11.35 0-3.03-1.18-5.88-3.32-8.02"/></symbol>
+    <symbol id="icon-search" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14Zm9 2-4-4"/></symbol>
+    <symbol id="icon-bed" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 18V6m0 7h18v5m0-5v-2a3 3 0 0 0-3-3h-7v5M7 11.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></symbol>
+    <symbol id="icon-bath" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3Zm2 0V5a2 2 0 0 1 3.5-1.3M7 19l-1 2m11-2 1 2"/></symbol>
+    <symbol id="icon-area" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 9V4h5M20 9V4h-5M4 15v5h5m11-5v5h-5"/></symbol>
+    <symbol id="icon-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21Zm0-9a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/></symbol>
+    <symbol id="icon-phone" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+    <symbol id="icon-mail" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" d="M3 6h18v12H3zM3 7l9 6 9-6"/></symbol>
+    <symbol id="icon-clock" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0-13v4l3 2"/></symbol>
+    <symbol id="icon-shield" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-3Zm-3 9 2 2 4-4"/></symbol>
+    <symbol id="icon-handshake" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m11 17 2 2a1.4 1.4 0 0 0 2-2m-4-2 2.5 2.5a1.4 1.4 0 0 0 2-2L13 13m-1-1 3.5 3.5a1.4 1.4 0 0 0 2-2L13 9l-2 2a1.4 1.4 0 0 1-2-2l3-3h2.5L21 12M3 11l5.5-5.5H12M3 11l7 7"/></symbol>
+    <symbol id="icon-globe" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm-9-9h18M12 3c2.5 2.5 3.5 5.5 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-5.5-3.5-9s1-6.5 3.5-9Z"/></symbol>
+    <symbol id="icon-chart" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M4 20h16M6 16l4-5 3 3 5-7m0 0h-3m3 0v3"/></symbol>
+    <symbol id="icon-instagram" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm5.5-9.5h.01"/></symbol>
+    <symbol id="icon-facebook" viewBox="0 0 24 24"><path fill="currentColor" d="M14 8h3V4h-3a4 4 0 0 0-4 4v2H8v4h2v8h4v-8h3l1-4h-4V8.5c0-.3.2-.5.5-.5Z"/></symbol>
+    <symbol id="icon-tiktok" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5 3c.4 2.2 1.8 3.6 4 3.9v3.2a7.6 7.6 0 0 1-4-1.2v6.3a6 6 0 1 1-6-6h.6v3.3a2.8 2.8 0 1 0 2.2 2.7V3h3.2Z"/></symbol>
+    <symbol id="icon-linkedin" viewBox="0 0 24 24"><path fill="currentColor" d="M4 9h4v12H4zM6 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm4 6h3.8v1.7c.6-1 1.9-2 3.9-2 4 0 4.3 2.6 4.3 6V21h-4v-5.6c0-1.4 0-3.1-1.9-3.1s-2.1 1.5-2.1 3V21h-4z"/></symbol>
+  </svg>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
