@@ -1,11 +1,20 @@
-# El Oskar — Comida Criolla
+# ISA gourmet — Arepas rellenas de queso (avance)
 
-Página web del restaurante El Oskar, hecha solo con HTML, CSS y JavaScript.
+Landing page de prototipo en un solo archivo: `index.html` (HTML + CSS + JS integrados).
 
-- `index.html` — estructura (Inicio, Menú, Nosotros, Contacto)
-- `styles.css` — estilos y diseño responsive para celular
-- `script.js` — menú móvil, animaciones y enlaces de WhatsApp
+Ver en línea: https://nappyplush-lang.github.io/mi--primer-mundo/
 
-Para ver la página, abre `index.html` en el navegador.
+Otros proyectos en este repo: `el-oskar/` (restaurante El Oskar) e `inmobiliaria-medellin/`.
+Las fotos están en `img/` (WebP optimizado + JPG de respaldo).
 
-Para cambiar el número de WhatsApp, edita `WHATSAPP_NUMBER` en `script.js` y el texto visible en `index.html` (`#phoneText`).
+## Qué cambiar
+
+- **Número de WhatsApp:** en `index.html`, busca `WHATSAPP_NUMERO` (al final, dentro de `<script>`). Formato: `573001234567`.
+- **Mensajes de WhatsApp:** cada botón tiene su mensaje en `data-msg="..."`.
+- **Precios:** busca `$ 0.000` en cada tarjeta.
+- **Textos:** busca los comentarios `✏️ TEXTO`.
+- **Fotos:** busca los comentarios `📷`. Productos: 600×750 px; foto principal: cuadrada (480 y 720 px).
+- **Redes sociales:** busca `🔗 REDES` y cambia los `#` por tus enlaces.
+- **Colores:** variables `--rojo`, `--maiz`, `--carbon` y `--crema` al inicio del `<style>`.
+
+Para verla, abre `index.html` en el navegador.
