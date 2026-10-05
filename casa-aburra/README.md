@@ -3,7 +3,7 @@
 Sitio web inmobiliario hecho con HTML, CSS y JavaScript puro (sin frameworks ni build).
 
 ```
-inmobiliaria-medellin/
+casa-aburra/
 ├── index.html        # Estructura y contenido (secciones, SEO, Open Graph)
 ├── css/styles.css    # Estilos mobile-first (paleta en :root)
 ├── js/main.js        # Datos de propiedades, filtros, menú, animaciones y formulario
@@ -28,15 +28,15 @@ Para usar fotos propias, cópialas a `img/` y usa rutas como `img/apto-poblado.j
 Abre `index.html` con doble clic, o mejor, sirve la carpeta:
 
 ```bash
-cd inmobiliaria-medellin
+cd casa-aburra
 python3 -m http.server 8000   # luego abre http://localhost:8000
 # o: npx serve .
 ```
 
 ## Desplegar gratis
 
-- **Netlify**: arrastra la carpeta `inmobiliaria-medellin` a https://app.netlify.com/drop,
-  o conecta el repo con *Base directory* = `inmobiliaria-medellin` y sin comando de build.
+- **Netlify**: arrastra la carpeta `casa-aburra` a https://app.netlify.com/drop,
+  o conecta el repo con *Base directory* = `casa-aburra` y sin comando de build.
   El formulario de contacto queda guardado en *Forms* automáticamente.
-- **Vercel**: importa el repo, *Framework Preset* = Other, *Root Directory* = `inmobiliaria-medellin`.
+- **Vercel**: importa el repo, *Framework Preset* = Other, *Root Directory* = `casa-aburra`.
   (En Vercel el formulario no guarda mensajes; ofrece enviarlos por WhatsApp.)

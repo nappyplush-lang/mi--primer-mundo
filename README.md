@@ -1,20 +1,14 @@
-# ISA gourmet — Arepas rellenas de queso (avance)
+# Mis páginas web
 
-Landing page de prototipo en un solo archivo: `index.html` (HTML + CSS + JS integrados).
+Una carpeta por página. Cada una se abre con su `index.html`.
 
-Ver en línea: https://nappyplush-lang.github.io/mi--primer-mundo/
+| Carpeta | Qué es |
+|---|---|
+| `isa-gourmet/` | Landing de ISA gourmet, arepas rellenas de queso |
+| `el-oskar/` | Restaurante El Oskar |
+| `casa-aburra/` | Inmobiliaria Casa Aburrá (Medellín) |
+| `faciales/` | Negocio de limpiezas faciales (por hacer) |
 
-Otros proyectos en este repo: `el-oskar/` (restaurante El Oskar) e `inmobiliaria-medellin/`.
-Las fotos están en `img/` (WebP optimizado + JPG de respaldo).
+Link público de ISA: https://nappyplush-lang.github.io/mi--primer-mundo/ (redirige a `isa-gourmet/`).
 
-## Qué cambiar
-
-- **Número de WhatsApp:** en `index.html`, busca `WHATSAPP_NUMERO` (al final, dentro de `<script>`). Formato: `573001234567`.
-- **Mensajes de WhatsApp:** cada botón tiene su mensaje en `data-msg="..."`.
-- **Precios:** busca `$ 0.000` en cada tarjeta.
-- **Textos:** busca los comentarios `✏️ TEXTO`.
-- **Fotos:** busca los comentarios `📷`. Productos: 600×750 px; foto principal: con fondo transparente (480 y 800 px de ancho).
-- **Redes sociales:** busca `🔗 REDES` y cambia los `#` por tus enlaces.
-- **Colores:** variables `--rojo`, `--maiz`, `--carbon` y `--crema` al inicio del `<style>`.
-
-Para verla, abre `index.html` en el navegador.
+Tus prácticas (`aprendieno-1`) viven en tu computador; cuando las subas, muévelas a `mis-practicas/`.
