@@ -13,7 +13,7 @@ Las fotos están en `img/` (WebP optimizado + JPG de respaldo).
 - **Mensajes de WhatsApp:** cada botón tiene su mensaje en `data-msg="..."`.
 - **Precios:** busca `$ 0.000` en cada tarjeta.
 - **Textos:** busca los comentarios `✏️ TEXTO`.
-- **Fotos:** busca los comentarios `📷`. Productos: 600×750 px; foto principal: cuadrada (480 y 720 px).
+- **Fotos:** busca los comentarios `📷`. Productos: 600×750 px; foto principal: con fondo transparente (480 y 800 px de ancho).
 - **Redes sociales:** busca `🔗 REDES` y cambia los `#` por tus enlaces.
 - **Colores:** variables `--rojo`, `--maiz`, `--carbon` y `--crema` al inicio del `<style>`.
 

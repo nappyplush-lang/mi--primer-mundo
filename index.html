@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#9B1B22">
   <meta property="og:title" content="ISA gourmet | Arepas rellenas de queso">
   <meta property="og:description" content="Un sabor para disfrutar. Pide tus arepas por WhatsApp.">
-  <meta property="og:image" content="img/hero-720.jpg">
+  <meta property="og:image" content="img/hero-arepa-800.jpg">
   <link rel="icon" type="image/png" href="img/favicon.png">
 
   <!-- Fuentes: Baloo 2 (títulos) + Nunito (textos). Solo los pesos que se usan. -->
@@ -18,7 +18,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
   <!-- La foto principal se precarga para que aparezca rápido -->
-  <link rel="preload" as="image" href="img/hero-480.webp" imagesrcset="img/hero-480.webp 480w, img/hero-720.webp 720w" imagesizes="(min-width: 900px) 440px, 80vw">
+  <link rel="preload" as="image" href="img/hero-arepa-480.webp" imagesrcset="img/hero-arepa-480.webp 480w, img/hero-arepa-800.webp 800w" imagesizes="(min-width: 900px) 440px, 80vw">
 
   <style>
     /* =========================================================
@@ -117,6 +117,20 @@
     }
     .btn--borde:hover { box-shadow: inset 0 0 0 2px var(--rojo); background: var(--rojo-suave); }
     :focus-visible { outline: 3px solid var(--maiz); outline-offset: 3px; }
+
+    /* ---------- Puntero: circulito rojo ----------
+       Solo en computador (en celular no hay puntero). Es un SVG dentro del CSS:
+       no usa JavaScript, así que no gasta nada de rendimiento.
+       Para cambiar el color, cambia %239B1B22 (es #9B1B22 escrito para URL). */
+    @media (hover: hover) and (pointer: fine) {
+      html {
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Ccircle cx='10' cy='10' r='7' fill='%239B1B22' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E") 10 10, auto;
+      }
+      /* Sobre botones y enlaces: el círculo crece y queda hueco */
+      a, button, [data-tilt] {
+        cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='36'%3E%3Ccircle cx='18' cy='18' r='14' fill='%239B1B22' fill-opacity='.18' stroke='%239B1B22' stroke-width='2.5'/%3E%3Ccircle cx='18' cy='18' r='3' fill='%239B1B22'/%3E%3C/svg%3E") 18 18, pointer;
+      }
+    }
 
     /* =========================================================
        1. HERO
@@ -222,15 +236,11 @@
       will-change: transform;
     }
     .hero__flota { animation: flotar 5s ease-in-out infinite; }
+    /* La arepa va recortada (fondo transparente) para que flote sola en 3D.
+       La sombra es fija: el navegador la dibuja una vez y solo mueve la capa. */
     .hero__plato img {
       width: 100%;
-      aspect-ratio: 1;
-      object-fit: cover;
-      border-radius: 50%;
-      box-shadow:
-        0 0 0 8px #fff,
-        0 0 0 10px var(--maiz),
-        0 30px 50px -20px rgba(35, 28, 26, .55);
+      filter: drop-shadow(0 22px 22px rgba(35, 28, 26, .28));
     }
     /* Sombra en el "piso": un degradado, mucho más liviano que un blur */
     .hero__sombra {
@@ -546,14 +556,14 @@
         <div class="hero__visual" data-parallax="-0.08">
           <div class="hero__flota">
             <div class="hero__plato" id="plato">
-              <!-- 📷 FOTO PRINCIPAL: reemplaza img/hero-480.webp, img/hero-720.webp y img/hero-720.jpg
-                   (foto cuadrada; se recorta en círculo automáticamente) -->
+              <!-- 📷 FOTO PRINCIPAL: reemplaza img/hero-arepa-480.webp, img/hero-arepa-800.webp
+                   (PNG/WebP con fondo transparente) y img/hero-arepa-800.jpg (respaldo sobre fondo crema) -->
               <picture>
                 <source type="image/webp"
-                        srcset="img/hero-480.webp 480w, img/hero-720.webp 720w"
+                        srcset="img/hero-arepa-480.webp 480w, img/hero-arepa-800.webp 800w"
                         sizes="(min-width: 900px) 440px, 80vw">
-                <img src="img/hero-720.jpg" alt="Arepa rellena de queso en un plato negro, con queso fresco y café"
-                     width="720" height="720" fetchpriority="high" decoding="async">
+                <img src="img/hero-arepa-800.jpg" alt="Arepa rellena de queso ISA gourmet, dorada con el logo de la marca"
+                     width="800" height="708" fetchpriority="high" decoding="async">
               </picture>
               <!-- ✏️ TEXTO: sello amarillo -->
               <span class="hero__sello" aria-hidden="true">100%<br>queso<br>de verdad</span>
