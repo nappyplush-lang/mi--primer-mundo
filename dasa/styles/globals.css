@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-deep: #0a0e19;
+  --sky-navy: #1b2540;
+  --sky-navy-2: #2e3a5c;
+  --warm-light: #f0b866;
+  --ink: #f4f1ea;
+  --ink-soft: rgba(244, 241, 234, 0.78);
+  --ink-muted: rgba(244, 241, 234, 0.6);
+  --hairline: rgba(244, 241, 234, 0.4);
+  --gutter: clamp(20px, 2.2vw, 32px);
+  --section-y: 80px;
+}
+@media (min-width: 1024px) {
+  :root { --section-y: clamp(120px, 11vw, 160px); }
+}
+
+@layer base {
+  * { border-radius: 0; box-shadow: none; }
+  html { scroll-behavior: smooth; background: var(--bg-deep); }
+  body {
+    background: var(--bg-deep);
+    color: var(--ink);
+    font-family: var(--font-sans), system-ui, sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+}
+
+@layer components {
+  .eyebrow {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--ink-muted);
+    font-weight: 400;
+  }
+  .h2-serif {
+    font-family: var(--font-serif), serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+  }
+  .container-site {
+    max-width: calc(1200px + 2 * var(--gutter));
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+  .section-y { padding-block: var(--section-y); }
+}
+
+/* Animaciones: solo si el usuario no pidió reducir movimiento */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes heroZoom { from { transform: scale(1.04); } to { transform: scale(1); } }
+@keyframes linePulse { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim-fade { animation: fadeUp 1.2s ease-out both; animation-delay: var(--d, 0ms); }
+  .anim-zoom { animation: heroZoom 8s ease-out both; }
+  .anim-pulse { animation: linePulse 3.2s ease-in-out infinite; }
+  .reveal { transition: opacity 1s ease-out, transform 1s ease-out; }
+  .reveal[data-reveal="hidden"] { opacity: 0; transform: translateY(16px); }
+}
+
+/* FAQ */
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+details[open] .faq-plus { transform: rotate(45deg); }
+.faq-plus { transition: transform 0.4s ease; }
