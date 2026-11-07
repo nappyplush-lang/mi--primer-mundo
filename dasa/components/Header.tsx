@@ -11,7 +11,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-30">
+    <header className="on-dark absolute inset-x-0 top-0 z-30">
       <div className="grid h-[72px] grid-cols-[1fr_auto_1fr] items-center px-gutter lg:h-[90px]">
         <div>
           <Logo className="text-base lg:text-[18px]" />
@@ -22,7 +22,7 @@ export default function Header() {
             <a
               key={l.href}
               href={l.href}
-              className="text-[14px] tracking-[0.02em] text-[rgba(244,241,234,0.9)] transition-colors hover:text-ink"
+              className="text-[14px] tracking-[0.02em] text-ink opacity-90 transition-opacity hover:opacity-100"
             >
               {l.label}
             </a>

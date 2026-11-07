@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 import "../styles/globals.css";
-import { site } from "@/config/site";
+import { basePath, site } from "@/config/site";
 
 const serif = Instrument_Serif({
   subsets: ["latin"],
@@ -29,9 +29,11 @@ export const metadata: Metadata = {
     description,
     locale: "es_CO",
     type: "website",
-    images: [{ url: "/images/hero-bg.jpg", width: 2400, height: 1250 }],
+    images: [{ url: `${basePath}/images/og.jpg`, width: 1200, height: 630 }],
   },
 };
+
+export const viewport: Viewport = { themeColor: "#F3ECE1" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

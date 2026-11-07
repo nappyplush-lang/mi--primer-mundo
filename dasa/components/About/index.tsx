@@ -10,7 +10,7 @@ const benefits = [
 
 export default function About() {
   return (
-    <section id="nosotros" aria-labelledby="nosotros-title" className="section-y">
+    <section id="nosotros" aria-labelledby="nosotros-title" className="section-y bg-sand">
       <div className="container-site grid gap-14 lg:grid-cols-2 lg:gap-24">
         <Reveal>
           <p className="eyebrow mb-6">Nosotros</p>
@@ -26,7 +26,7 @@ export default function About() {
           <ul>
             {benefits.map((b, i) => (
               <li key={b} className="flex items-baseline gap-6 border-t border-hairline py-5 last:border-b">
-                <span className="eyebrow">0{i + 1}</span>
+                <span className="eyebrow text-accent">0{i + 1}</span>
                 <span className="font-serif text-2xl">{b}</span>
               </li>
             ))}

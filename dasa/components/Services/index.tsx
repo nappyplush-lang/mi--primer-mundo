@@ -8,7 +8,7 @@ const icons = { droplet: Droplet, figure: PersonStanding, hand: Hand };
 
 export default function Services() {
   return (
-    <section id="servicios" aria-labelledby="servicios-title" className="section-y">
+    <section id="servicios" aria-labelledby="servicios-title" className="section-y bg-paper">
       <div className="container-site">
         <Reveal>
           <p className="eyebrow mb-6">Servicios</p>
@@ -23,9 +23,9 @@ export default function Services() {
             return (
               <li key={s.number} className="border-t border-hairline last:border-b">
                 <Reveal className="grid gap-8 py-12 md:grid-cols-12 lg:py-16">
-                  <span className="eyebrow md:col-span-1">{s.number} / 03</span>
+                  <span className="eyebrow text-accent md:col-span-1">{s.number} / 03</span>
                   <div className="md:col-span-7">
-                    <Icon size={22} strokeWidth={1.25} aria-hidden="true" className="mb-5 text-ink" />
+                    <Icon size={22} strokeWidth={1.25} aria-hidden="true" className="mb-5 text-ink-soft" />
                     <h3 className="h2-serif">{s.title}</h3>
                     <ul className="mt-6 space-y-2 text-ink-soft">
                       {s.items.map((i) => (
@@ -42,7 +42,7 @@ export default function Services() {
                   <div
                     role="img"
                     aria-label={`${s.photo} (imagen pendiente)`}
-                    className="flex aspect-[4/5] w-full max-w-[280px] items-end border border-hairline p-4 md:col-span-4 md:justify-self-end"
+                    className="photo-soft flex aspect-[4/5] w-full max-w-[280px] items-end border border-hairline p-4 md:col-span-4 md:justify-self-end"
                   >
                     <span className="eyebrow">Foto · {s.photo}</span>
                   </div>
