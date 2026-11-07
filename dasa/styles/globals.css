@@ -2,15 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+:root,
+.on-light {
+  --bg-base: #f3ece1;
+  --bg-alt: #e9dfd0;
+  --surface: #faf6ef;
+  --ink: #3a2a20;
+  --ink-soft: #5e4a3d;
+  --ink-muted: #6f5c4b;
+  --hairline: rgba(58, 42, 32, 0.18);
+  --accent: #8f5037;
+  --accent-2: #b8875a;
+  --deep: #2b1e17;
+  --on-photo: #f7f0e6;
+  --on-photo-muted: rgba(247, 240, 230, 0.72);
+  --on-photo-hairline: rgba(247, 240, 230, 0.45);
+  --photo-fallback: #3a2a20;
+  /* Derivados de botones/estados (cambian dentro de .on-dark) */
+  --btn-border: rgba(58, 42, 32, 0.4);
+  --btn-hover: var(--accent);
+  --line-hover: var(--accent-2);
+  --focus: var(--accent);
+}
+/* Zonas sobre foto / fondo espresso: los tokens de texto pasan a crema */
+.on-dark {
+  --ink: var(--on-photo);
+  --ink-soft: var(--on-photo-muted);
+  --ink-muted: var(--on-photo-muted);
+  --hairline: var(--on-photo-hairline);
+  --btn-border: var(--on-photo-hairline);
+  --btn-hover: var(--on-photo);
+  --line-hover: var(--on-photo);
+  --focus: var(--on-photo);
+}
 :root {
-  --bg-deep: #0a0e19;
-  --sky-navy: #1b2540;
-  --sky-navy-2: #2e3a5c;
-  --warm-light: #f0b866;
-  --ink: #f4f1ea;
-  --ink-soft: rgba(244, 241, 234, 0.78);
-  --ink-muted: rgba(244, 241, 234, 0.6);
-  --hairline: rgba(244, 241, 234, 0.4);
   --gutter: clamp(20px, 2.2vw, 32px);
   --section-y: 80px;
 }
@@ -20,15 +45,15 @@
 
 @layer base {
   * { border-radius: 0; box-shadow: none; }
-  html { scroll-behavior: smooth; background: var(--bg-deep); }
+  html { scroll-behavior: smooth; background: var(--bg-base); }
   body {
-    background: var(--bg-deep);
+    background: var(--bg-base);
     color: var(--ink);
     font-family: var(--font-sans), system-ui, sans-serif;
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
   }
-  :focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+  :focus-visible { outline: 1px solid var(--focus); outline-offset: 4px; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 }
 
@@ -46,6 +71,7 @@
     line-height: 1.02;
     letter-spacing: -0.01em;
   }
+  .h2-serif em { color: var(--accent); }
   .container-site {
     max-width: calc(1200px + 2 * var(--gutter));
     margin-inline: auto;
@@ -65,6 +91,16 @@
   .anim-pulse { animation: linePulse 3.2s ease-in-out infinite; }
   .reveal { transition: opacity 1s ease-out, transform 1s ease-out; }
   .reveal[data-reveal="hidden"] { opacity: 0; transform: translateY(16px); }
+}
+
+/* Tratamiento cálido de fotos (hero-bg y hero-fg llevan EL MISMO filtro) */
+.hero-photo { filter: sepia(0.35) saturate(0.85) hue-rotate(-8deg) brightness(0.95); }
+.photo-soft { filter: sepia(0.15) saturate(0.9); }
+.hero-veil { background: rgba(120, 78, 50, 0.18); mix-blend-mode: multiply; }
+.hero-shade {
+  background:
+    linear-gradient(to bottom, rgba(43, 30, 23, 0.5) 0%, rgba(43, 30, 23, 0) 30%),
+    linear-gradient(to top, rgba(43, 30, 23, 0.6) 0%, rgba(43, 30, 23, 0) 45%);
 }
 
 /* FAQ */

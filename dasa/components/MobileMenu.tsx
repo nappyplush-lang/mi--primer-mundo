@@ -28,7 +28,7 @@ export default function MobileMenu({ open, onClose }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label="Menú de navegación"
-      className="fixed inset-0 z-50 flex flex-col bg-bg-deep px-gutter"
+      className="fixed inset-0 z-50 on-light flex flex-col bg-surface px-gutter text-ink"
     >
       <div className="flex h-[72px] items-center justify-between">
         <Logo className="text-base" />

@@ -8,7 +8,7 @@ export default function Hero() {
   return (
     <section
       id="inicio"
-      className="relative isolate min-h-[640px] h-svh overflow-hidden bg-bg-deep"
+      className="on-dark relative isolate min-h-[640px] h-svh overflow-hidden bg-photo-fallback"
     >
       {/* z0 · FOTO DE FONDO — PLACEHOLDER: public/images/hero-bg.jpg (2400×1250).
           Reemplazar por la fachada real del centro al anochecer, ventanas con luz cálida. */}
@@ -18,19 +18,12 @@ export default function Hero() {
         fill
         priority
         sizes="100vw"
-        className="anim-zoom z-0 object-cover object-[55%_50%] sm:object-center"
+        className="hero-photo anim-zoom z-0 object-cover object-[55%_50%] sm:object-center"
       />
 
       {/* z1 · Overlays */}
-      <div aria-hidden="true" className="absolute inset-0 z-[1] bg-[rgba(5,8,16,0.15)]" />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 z-[1]"
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(5,8,16,0.55) 0%, rgba(5,8,16,0) 30%), linear-gradient(to top, rgba(5,8,16,0.60) 0%, rgba(5,8,16,0) 45%)",
-        }}
-      />
+      <div aria-hidden="true" className="hero-veil absolute inset-0 z-[1]" />
+      <div aria-hidden="true" className="hero-shade absolute inset-0 z-[1]" />
 
       {/* Eyebrow */}
       <p className="eyebrow anim-fade absolute left-gutter right-gutter top-[88px] z-[4] max-w-[220px] sm:max-w-none lg:top-[13%]">
@@ -66,7 +59,7 @@ export default function Hero() {
             fill
             priority
             sizes="100vw"
-            className="anim-zoom object-cover object-[55%_50%] sm:object-center"
+            className="hero-photo anim-zoom object-cover object-[55%_50%] sm:object-center"
           />
         </div>
       )}

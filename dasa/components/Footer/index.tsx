@@ -5,7 +5,7 @@ import { buildWhatsAppLink, whatsappMessages } from "@/lib/whatsapp";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-hairline">
+    <footer className="on-dark border-t border-hairline bg-deep">
       <div className="container-site section-y grid gap-12 md:grid-cols-2 lg:grid-cols-4">
         <div>
           <Logo className="text-lg" />
