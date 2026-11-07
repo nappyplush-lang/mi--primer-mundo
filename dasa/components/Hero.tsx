@@ -1,7 +1,7 @@
 import Image from "next/image";
 import WhatsAppButton from "./WhatsAppButton";
 import ScrollIndicator from "./ScrollIndicator";
-import { flags, site } from "@/config/site";
+import { basePath, flags, site } from "@/config/site";
 import { whatsappMessages } from "@/lib/whatsapp";
 
 export default function Hero() {
@@ -13,7 +13,7 @@ export default function Hero() {
       {/* z0 · FOTO DE FONDO — PLACEHOLDER: public/images/hero-bg.jpg (2400×1250).
           Reemplazar por la fachada real del centro al anochecer, ventanas con luz cálida. */}
       <Image
-        src="/images/hero-bg.jpg"
+        src={`${basePath}/images/hero-bg.jpg`}
         alt={`Fachada del centro estético ${site.name} al anochecer, con luz cálida en las ventanas`}
         fill
         priority
@@ -60,7 +60,7 @@ export default function Hero() {
       {flags.HERO_DEPTH_EFFECT && (
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-[3]">
           <Image
-            src="/images/hero-fg.png"
+            src={`${basePath}/images/hero-fg.png`}
             alt=""
             aria-hidden="true"
             fill

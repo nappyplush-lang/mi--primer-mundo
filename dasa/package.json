@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:pages": "NEXT_PUBLIC_BASE_PATH=/mi--primer-mundo/dasa-web next build && rm -rf ../dasa-web && cp -r out ../dasa-web && touch ../.nojekyll",
     "start": "next start",
     "lint": "tsc --noEmit"
   },

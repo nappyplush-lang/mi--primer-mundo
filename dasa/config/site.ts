@@ -20,3 +20,6 @@ export const flags = {
   /** Secciones inferiores (fuera de la captura). */
   SHOW_EXTRA_SECTIONS: true,
 } as const;
+
+/** Prefijo de ruta para GitHub Pages (vacío en local). */
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
