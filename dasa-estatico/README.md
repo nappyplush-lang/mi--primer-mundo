@@ -4,7 +4,7 @@ Sin dependencias ni build. Abre `index.html` o publícalo tal cual (GitHub Pages
 Páginas: `index.html`, `servicios.html`, `nosotros.html`, `contacto.html`, `404.html`.
 
 ## Imágenes que debes crear (carpeta `images/`)
-`hero.jpg` (4:5), `servicio-facial.jpg`, `servicio-corporal.jpg`, `servicio-masajes.jpg` (3:4), `promo.jpg` (9:7), `nosotros.jpg` (4:5), `ig-1.jpg` … `ig-6.jpg` (cuadradas), `og-image.jpg` (1200×630). Optimízalas a WebP/JPG ≤ 150 KB. Mientras no existan se ve un degradado rosa/malva.
+`hero.jpg` (1920×1080, sujeto a la derecha; el texto va a la izquierda), `servicio-facial.jpg`, `servicio-corporal.jpg`, `servicio-masajes.jpg` (3:4), `promo.jpg` (9:7), `nosotros.jpg` (4:5), `ig-1.jpg` … `ig-6.jpg` (cuadradas), `og-image.jpg` (1200×630). Optimízalas a WebP/JPG ≤ 150 KB. Mientras no existan se ve un degradado rosa/malva.
 
 ## Lista REEMPLAZAR (busca `REEMPLAZAR` en el código)
 - [ ] Dominio `https://www.dasa-ejemplo.com.co` (canonical, og:url, og:image, JSON-LD, `robots.txt`, `sitemap.xml`)
