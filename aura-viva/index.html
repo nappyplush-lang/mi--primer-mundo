@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aura Viva · Centro Estético y Spa en Medellín</title>
+<meta name="description" content="Aura Viva, centro estético y spa en El Poblado, Medellín. Tratamientos faciales, corporales y de spa con especialistas certificadas. Reserva por WhatsApp.">
+<meta name="theme-color" content="#0d3b3a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230d3b3a'/%3E%3Cpath d='M16 6c4 5 7 8 7 12a7 7 0 0 1-14 0c0-4 3-7 7-12z' fill='%237fd1c7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="site-header" id="top">
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="Aura Viva, inicio">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="currentColor"/><path d="M16 6c4 5 7 8 7 12a7 7 0 0 1-14 0c0-4 3-7 7-12z" fill="#7fd1c7"/></svg>
+      <span>Aura Viva</span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav" aria-label="Abrir menú">
+      <span></span><span></span>
+    </button>
+    <nav id="nav" class="nav" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#ubicacion">Ubicación</a>
+      <a class="btn btn-sm" href="#reservar">Reservar</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kicker" data-hero style="--i:0">Centro estético y spa · El Poblado, Medellín</p>
+      <h1 data-hero style="--i:1">Tu piel, en calma.<br>Tu día, <em>más liviano.</em></h1>
+      <p class="lead" data-hero style="--i:2">Tratamientos faciales, corporales y rituales de spa diseñados por especialistas certificadas. Resultados visibles, sin prisa y sin promesas exageradas.</p>
+      <div class="hero-cta" data-hero style="--i:3">
+        <a class="btn" href="#reservar">Reservar mi cita</a>
+        <a class="btn btn-ghost" href="#servicios">Ver servicios y precios</a>
+      </div>
+      <ul class="trust" data-hero style="--i:4">
+        <li>12 años cuidando piel colombiana</li>
+        <li>Productos dermatológicamente probados</li>
+        <li>Primera valoración sin costo</li>
+      </ul>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 400 400" focusable="false">
+        <defs>
+          <radialGradient id="orb" cx="38%" cy="32%" r="75%">
+            <stop offset="0" stop-color="#e9fbf7"/>
+            <stop offset=".45" stop-color="#7fd1c7"/>
+            <stop offset="1" stop-color="#1f8a86"/>
+          </radialGradient>
+          <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffd2c2"/><stop offset="1" stop-color="#ff9f84"/>
+          </linearGradient>
+        </defs>
+        <g class="rings">
+          <circle class="ring" cx="200" cy="200" r="120"/>
+          <circle class="ring" cx="200" cy="200" r="120"/>
+          <circle class="ring" cx="200" cy="200" r="120"/>
+        </g>
+        <g class="orb"><circle cx="200" cy="200" r="104" fill="url(#orb)"/>
+          <path d="M200 120c26 34 46 54 46 82a46 46 0 0 1-92 0c0-28 20-48 46-82z" fill="#fff" opacity=".32"/></g>
+        <path class="leaf l1" d="M70 300c30-70 80-80 120-70-10 50-60 90-120 70z" fill="url(#leaf)"/>
+        <path class="leaf l2" d="M330 110c-40 6-70 30-76 70 40 6 78-22 76-70z" fill="#bfeae3"/>
+        <circle class="dot d1" cx="320" cy="300" r="9" fill="#ff9f84"/>
+        <circle class="dot d2" cx="82" cy="120" r="6" fill="#7fd1c7"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICIOS -->
+<section class="section" id="servicios">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Servicios y precios</h2>
+      <p>Precios en pesos colombianos, IVA incluido. Toca “Reservar” y te escribimos por WhatsApp para confirmar tu horario.</p>
+    </div>
+
+    <div class="tabs" role="group" aria-label="Filtrar por categoría" data-reveal>
+      <button class="tab" data-filter="all" aria-pressed="true">Todos</button>
+      <button class="tab" data-filter="facial" aria-pressed="false">Facial</button>
+      <button class="tab" data-filter="corporal" aria-pressed="false">Corporal</button>
+      <button class="tab" data-filter="spa" aria-pressed="false">Spa</button>
+      <button class="tab" data-filter="depilacion" aria-pressed="false">Depilación</button>
+    </div>
+
+    <ul class="cards" id="cards">
+      <li class="card" data-cat="facial" data-reveal style="--i:0"><h3>Limpieza facial profunda</h3><p>Extracción, vapor y mascarilla calmante para una piel limpia y equilibrada.</p><div class="card-foot"><span class="meta">60 min</span><strong class="price">$120.000</strong></div><button class="link" data-service="Limpieza facial profunda">Reservar</button></li>
+      <li class="card" data-cat="facial" data-reveal style="--i:1"><h3>Hidrafacial</h3><p>Limpieza, exfoliación suave e hidratación intensiva con sérums activos.</p><div class="card-foot"><span class="meta">50 min</span><strong class="price">$180.000</strong></div><button class="link" data-service="Hidrafacial">Reservar</button></li>
+      <li class="card" data-cat="facial" data-reveal style="--i:2"><h3>Peeling antimanchas</h3><p>Aclara manchas y unifica el tono con ácidos suaves, bajo valoración previa.</p><div class="card-foot"><span class="meta">45 min</span><strong class="price">$150.000</strong></div><button class="link" data-service="Peeling antimanchas">Reservar</button></li>
+      <li class="card" data-cat="corporal" data-reveal style="--i:0"><h3>Masaje descontracturante</h3><p>Trabajo profundo en espalda, cuello y hombros para soltar la tensión acumulada.</p><div class="card-foot"><span class="meta">60 min</span><strong class="price">$140.000</strong></div><button class="link" data-service="Masaje descontracturante">Reservar</button></li>
+      <li class="card" data-cat="corporal" data-reveal style="--i:1"><h3>Drenaje linfático</h3><p>Técnica manual suave que ayuda a reducir la retención de líquidos.</p><div class="card-foot"><span class="meta">60 min</span><strong class="price">$110.000</strong></div><button class="link" data-service="Drenaje linfático">Reservar</button></li>
+      <li class="card" data-cat="corporal" data-reveal style="--i:2"><h3>Modelado reductor</h3><p>Maderoterapia y radiofrecuencia para moldear y tonificar. Se recomienda en paquete.</p><div class="card-foot"><span class="meta">75 min</span><strong class="price">$160.000</strong></div><button class="link" data-service="Modelado reductor">Reservar</button></li>
+      <li class="card" data-cat="spa" data-reveal style="--i:0"><h3>Ritual de piedras calientes</h3><p>Masaje con piedras volcánicas, aromaterapia y té de cortesía.</p><div class="card-foot"><span class="meta">90 min</span><strong class="price">$190.000</strong></div><button class="link" data-service="Ritual de piedras calientes">Reservar</button></li>
+      <li class="card" data-cat="spa" data-reveal style="--i:1"><h3>Circuito de hidroterapia</h3><p>Jacuzzi, sauna y ducha de contraste. Acceso por 90 minutos.</p><div class="card-foot"><span class="meta">90 min</span><strong class="price">$85.000</strong></div><button class="link" data-service="Circuito de hidroterapia">Reservar</button></li>
+      <li class="card" data-cat="spa" data-reveal style="--i:2"><h3>Pedicure spa</h3><p>Exfoliación, masaje de piernas e hidratación profunda con esmaltado.</p><div class="card-foot"><span class="meta">60 min</span><strong class="price">$70.000</strong></div><button class="link" data-service="Pedicure spa">Reservar</button></li>
+      <li class="card" data-cat="depilacion" data-reveal style="--i:0"><h3>Láser diodo · axilas</h3><p>Reducción progresiva del vello. Paquete de 6 sesiones disponible.</p><div class="card-foot"><span class="meta">20 min</span><strong class="price">$90.000</strong></div><button class="link" data-service="Láser diodo axilas">Reservar</button></li>
+      <li class="card" data-cat="depilacion" data-reveal style="--i:1"><h3>Láser diodo · piernas completas</h3><p>Tecnología indolora con enfriamiento integrado, apta para todo tipo de piel.</p><div class="card-foot"><span class="meta">50 min</span><strong class="price">$260.000</strong></div><button class="link" data-service="Láser diodo piernas completas">Reservar</button></li>
+      <li class="card" data-cat="depilacion" data-reveal style="--i:2"><h3>Diseño y laminado de cejas</h3><p>Diseño a la medida de tu rostro y laminado para un acabado definido.</p><div class="card-foot"><span class="meta">40 min</span><strong class="price">$65.000</strong></div><button class="link" data-service="Diseño y laminado de cejas">Reservar</button></li>
+    </ul>
+  </div>
+</section>
+
+<!-- PROCESO -->
+<section class="section band" aria-labelledby="proceso-t">
+  <div class="wrap split">
+    <div data-reveal>
+      <h2 id="proceso-t">Primero escuchamos,<br>después tratamos.</h2>
+      <p>Cada visita empieza con una valoración de tu piel y tus hábitos. Con eso armamos un plan realista, con pasos claros y sin sesiones de más.</p>
+    </div>
+    <ol class="steps">
+      <li data-reveal style="--i:0"><h3>Valoración</h3><p>Analizamos tu piel y definimos objetivos contigo.</p></li>
+      <li data-reveal style="--i:1"><h3>Tratamiento</h3><p>Protocolos personalizados con productos de uso profesional.</p></li>
+      <li data-reveal style="--i:2"><h3>Seguimiento</h3><p>Te acompañamos por WhatsApp entre sesiones.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section class="section" id="equipo">
+  <div class="wrap">
+    <div class="section-head" data-reveal>
+      <h2>Quienes cuidan de ti</h2>
+      <p>Profesionales certificadas, en formación continua.</p>
+    </div>
+    <ul class="team">
+      <li class="member" data-reveal style="--i:0"><div class="avatar a1" aria-hidden="true">LM</div><h3>Laura Mejía</h3><p class="role">Directora · Cosmetóloga</p><p>Especialista en tratamientos faciales avanzados, 12 años de experiencia.</p></li>
+      <li class="member" data-reveal style="--i:1"><div class="avatar a2" aria-hidden="true">DR</div><h3>Daniela Restrepo</h3><p class="role">Terapeuta corporal</p><p>Drenaje linfático y modelado. Certificada en terapia Vodder.</p></li>
+      <li class="member" data-reveal style="--i:2"><div class="avatar a3" aria-hidden="true">SG</div><h3>Sebastián Gil</h3><p class="role">Masoterapeuta</p><p>Masaje descontracturante y rituales de spa, enfoque en bienestar deportivo.</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="section band" id="testimonios">
+  <div class="wrap">
+    <div class="section-head row" data-reveal>
+      <div><h2>Lo que dicen nuestras clientas</h2><p>Reseñas de ejemplo; reemplázalas por las reales.</p></div>
+      <div class="arrows">
+        <button class="arrow" data-dir="-1" aria-label="Testimonio anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button class="arrow" data-dir="1" aria-label="Testimonio siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+    <ul class="quotes" id="quotes" tabindex="0" aria-label="Testimonios">
+      <li><blockquote><p>Llegué estresada y salí otra persona. Laura entendió exactamente qué necesitaba mi piel.</p></blockquote><p class="who"><strong>Carolina R.</strong> · Hidrafacial</p></li>
+      <li><blockquote><p>El masaje de Sebastián me quitó el dolor de espalda de semanas. Ya agendé el siguiente.</p></blockquote><p class="who"><strong>Andrés P.</strong> · Descontracturante</p></li>
+      <li><blockquote><p>Lugar impecable y atención muy cálida. El circuito de hidroterapia vale cada peso.</p></blockquote><p class="who"><strong>Valentina Z.</strong> · Circuito spa</p></li>
+      <li><blockquote><p>Con el láser noté resultados desde la tercera sesión y sin molestias. Súper recomendado.</p></blockquote><p class="who"><strong>Mariana O.</strong> · Depilación láser</p></li>
+    </ul>
+  </div>
+</section>
+
+<!-- RESERVAR -->
+<section class="section" id="reservar">
+  <div class="wrap split">
+    <div data-reveal>
+      <h2>Reserva en un minuto</h2>
+      <p>Completa los datos y se abrirá WhatsApp con tu solicitud lista para enviar. Te confirmamos disponibilidad en menos de 2 horas hábiles.</p>
+      <p class="note">Valoración inicial sin costo con tu primera cita.</p>
+    </div>
+    <form class="form" id="form" novalidate data-reveal style="--i:1">
+      <div class="field"><label for="f-name">Nombre</label><input id="f-name" name="name" autocomplete="name" required><span class="err" id="e-name" role="alert"></span></div>
+      <div class="field"><label for="f-service">Servicio</label>
+        <select id="f-service" name="service" required><option value="">Elige un servicio</option></select><span class="err" id="e-service" role="alert"></span></div>
+      <div class="two">
+        <div class="field"><label for="f-date">Fecha</label><input id="f-date" name="date" type="date" required><span class="err" id="e-date" role="alert"></span></div>
+        <div class="field"><label for="f-time">Hora</label>
+          <select id="f-time" name="time" required><option value="">Elige</option><option>9:00 a. m.</option><option>10:30 a. m.</option><option>12:00 m.</option><option>2:00 p. m.</option><option>3:30 p. m.</option><option>5:00 p. m.</option></select><span class="err" id="e-time" role="alert"></span></div>
+      </div>
+      <button class="btn btn-wa" type="submit">Enviar por WhatsApp</button>
+    </form>
+  </div>
+</section>
+
+<!-- UBICACION -->
+<section class="section band" id="ubicacion">
+  <div class="wrap split">
+    <div data-reveal>
+      <h2>Visítanos</h2>
+      <address>
+        <p><strong>Aura Viva Centro Estético</strong><br>Carrera 35 #8A-45, local 102<br>El Poblado, Medellín</p>
+      </address>
+      <dl class="hours">
+        <div><dt>Lunes a viernes</dt><dd>8:00 a. m. – 7:00 p. m.</dd></div>
+        <div><dt>Sábados</dt><dd>9:00 a. m. – 5:00 p. m.</dd></div>
+        <div><dt>Domingos</dt><dd>Cerrado</dd></div>
+      </dl>
+      <p><a class="btn btn-ghost" id="maps" href="https://www.google.com/maps/search/?api=1&query=Carrera+35+8A-45+El+Poblado+Medell%C3%ADn" target="_blank" rel="noopener">Cómo llegar</a></p>
+    </div>
+    <div class="map" data-reveal style="--i:1" role="img" aria-label="Mapa esquemático: Aura Viva en El Poblado, cerca de la Avenida El Poblado">
+      <svg viewBox="0 0 400 300" aria-hidden="true" focusable="false">
+        <rect width="400" height="300" fill="#e3f3ef"/>
+        <path d="M-10 220 C80 180 150 240 260 170 S380 120 420 140" stroke="#fff" stroke-width="22" fill="none"/>
+        <path d="M120 -10 L160 310" stroke="#fff" stroke-width="16"/>
+        <path d="M-10 90 L420 60" stroke="#fff" stroke-width="12"/>
+        <path d="M300 -10 L260 310" stroke="#fff" stroke-width="10"/>
+        <rect x="190" y="215" width="70" height="40" rx="8" fill="#c8e8e1"/>
+        <rect x="40" y="110" width="60" height="50" rx="8" fill="#c8e8e1"/>
+        <rect x="290" y="190" width="70" height="60" rx="8" fill="#c8e8e1"/>
+        <g class="pin"><path d="M210 120c20 0 34 14 34 32 0 22-34 52-34 52s-34-30-34-52c0-18 14-32 34-32z" fill="#0d3b3a"/><circle cx="210" cy="152" r="12" fill="#7fd1c7"/></g>
+      </svg>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap foot">
+    <p class="brand-line">Aura Viva · Centro Estético y Spa</p>
+    <p><a id="wa-foot" href="https://wa.me/573001234567">WhatsApp +57 300 123 4567</a> · <a href="https://instagram.com/" rel="noopener">Instagram</a></p>
+    <p class="small">© <span id="year">2026</span> Aura Viva. Sitio de demostración con datos de ejemplo.</p>
+  </div>
+</footer>
+
+<a class="fab" id="fab" href="https://wa.me/573001234567" aria-label="Escríbenos por WhatsApp">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.4 7.5L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12z"/></svg>
+</a>
+
+<script src="app.js" defer></script>
+</body>
+</html>
