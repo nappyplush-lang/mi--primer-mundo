@@ -202,3 +202,6 @@ p{margin:0 0 1em}
 
 /* Si la imagen aún no existe, no mostrar el texto alternativo sobre el degradado */
 .arch img,.oval img,.pic img,.ig-grid img,.hero-bg{font-size:0;color:transparent}
+
+/* Retratos: anclar arriba para no cortar la cabeza */
+.arch-top img{object-position:center top}
