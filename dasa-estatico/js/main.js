@@ -49,16 +49,45 @@
     if (img.complete && img.naturalWidth === 0) hide();
   });
 
-  // Formulario de contacto -> mensaje de WhatsApp
+  // Formulario de contacto: valida y abre WhatsApp con el mensaje prellenado
   var form = d.getElementById('form-cita');
   if (form) {
+    var fecha = form.elements.fecha;
+    if (fecha) {
+      var hoy = new Date();
+      fecha.min = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
+    }
+    var setError = function (input, msg) {
+      var box = d.getElementById(input.getAttribute('aria-describedby'));
+      box.textContent = msg;
+      input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      input.classList.toggle('invalid', !!msg);
+    };
+    var checkNombre = function () {
+      var v = form.elements.nombre.value.trim();
+      var m = !v ? 'Escribe tu nombre para poder atenderte.' : (v.length < 2 ? 'El nombre es muy corto.' : '');
+      setError(form.elements.nombre, m); return !m;
+    };
+    var checkTel = function () {
+      var v = form.elements.telefono.value.replace(/[\s\-().]/g, '').replace(/^\+?57/, '');
+      var m = !v ? 'Escribe tu teléfono para confirmar la cita.' : (!/^3\d{9}$/.test(v) ? 'Escribe un celular válido de 10 dígitos, por ejemplo 300 000 0000.' : '');
+      setError(form.elements.telefono, m); return !m;
+    };
+    form.elements.nombre.addEventListener('blur', checkNombre);
+    form.elements.telefono.addEventListener('blur', checkTel);
+    ['nombre', 'telefono'].forEach(function (n) {
+      form.elements[n].addEventListener('input', function () { if (this.classList.contains('invalid')) (n === 'nombre' ? checkNombre : checkTel)(); });
+    });
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      var f = new FormData(form);
-      var msg = 'Hola DASA, soy ' + f.get('nombre') + '. Quiero reservar una cita para: ' + f.get('servicio') +
-        '. Preferiría ' + (f.get('fecha') || 'una fecha por definir') + ' en la ' + f.get('jornada') + '.' +
-        (f.get('nota') ? ' Nota: ' + f.get('nota') : '');
-      window.open(form.dataset.wa + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      var okN = checkNombre(), okT = checkTel();
+      if (!okN || !okT) { (okN ? form.elements.telefono : form.elements.nombre).focus(); return; }
+      var f = form.elements;
+      var partes = ['Hola DASA, soy ' + f.nombre.value.trim() + '.', 'Mi teléfono es ' + f.telefono.value.trim() + '.'];
+      if (f.servicio.value) partes.push('Me interesa: ' + f.servicio.value + '.');
+      if (f.fecha.value) { var x = f.fecha.value.split('-'); partes.push('Fecha preferida: ' + x[2] + '/' + x[1] + '/' + x[0] + '.'); }
+      if (f.mensaje.value.trim()) partes.push('Mensaje: ' + f.mensaje.value.trim());
+      window.open(form.dataset.wa + '?text=' + encodeURIComponent(partes.join(' ')), '_blank', 'noopener');
     });
   }
 })();

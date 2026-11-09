@@ -188,7 +188,8 @@ p{margin:0 0 1em}
 .info dd{margin:.2rem 0 0}
 @media (min-width:860px){.info{grid-template-columns:1fr 1.2fr;gap:4rem;align-items:start}.map{height:440px}}
 .form{display:grid;gap:1rem;background:#fff;padding:clamp(1.5rem,5vw,2.4rem);border-radius:var(--radius);box-shadow:var(--shadow)}
-.form label{font-size:.8125rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:grid;gap:.4rem}
+.form .field{display:grid;gap:.4rem}
+.form label{font-size:.8125rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .form input,.form select,.form textarea{font:inherit;color:var(--ink);padding:.85rem 1rem;border:1.5px solid var(--rose-200);border-radius:12px;background:var(--rose-50);width:100%}
 .form input:focus,.form select:focus,.form textarea:focus{outline:0;border-color:var(--mauve-500)}
 .page-head{background:linear-gradient(160deg,var(--rose-100),var(--rose-50));padding:clamp(3rem,8vw,5.5rem) 0 clamp(2rem,5vw,3.5rem);position:relative;overflow:hidden}
@@ -228,6 +229,12 @@ p{margin:0 0 1em}
 /* Retratos: anclar arriba para no cortar la cabeza */
 .arch-top img{object-position:center top}
 
+/* Validación del formulario */
+.form .err{margin:0;font-size:.875rem;line-height:1.4;color:#a3243b}
+.form .err:empty{display:none}
+.form input.invalid{border-color:#a3243b;background:#fff7f8}
+.form .note{margin:0;font-size:.8125rem;color:var(--muted);text-align:center}
+
 </style>
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
@@ -240,9 +247,9 @@ p{margin:0 0 1em}
   "telephone":"+573000000000",
   "image":"https://www.dasa-ejemplo.com.co/images/og-image.jpg",
   "priceRange":"$$",
-  "address":{"@type":"PostalAddress","streetAddress":"Cra. 37 #10-50","addressLocality":"Medellín","addressRegion":"Antioquia","postalCode":"050021","addressCountry":"CO"},
+  "address":{"@type":"PostalAddress","streetAddress":"Carrera 00 # 00-00","addressLocality":"Medellín","addressRegion":"Antioquia","postalCode":"050021","addressCountry":"CO"},
   "geo":{"@type":"GeoCoordinates","latitude":6.2092,"longitude":-75.5680},
-  "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"09:00","closes":"19:00"}],
+  "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"09:00","closes":"18:00"}],
   "sameAs":["https://www.instagram.com/dasa.centroestetico"]
 }
 </script><!-- REEMPLAZAR: todos los datos de este bloque (teléfono, dirección, coordenadas, horario, URLs) -->
@@ -348,7 +355,7 @@ p{margin:0 0 1em}
       <div><h4>Navegación</h4><ul><li><a href="index.html">Inicio</a></li><li><a href="servicios.html">Servicios</a></li><li><a href="nosotros.html">Nosotros</a></li><li><a href="contacto.html">Contacto</a></li></ul></div>
       <div><h4>Servicios</h4><ul><li>Tratamientos faciales</li><li>Tratamientos corporales</li><li>Masajes de relajación</li></ul></div>
       <div><h4>Contacto</h4><ul>
-        <li>Cra. 37 #10-50, El Poblado, Medellín <!-- REEMPLAZAR: dirección --></li>
+        <li>Carrera 00 # 00-00, El Poblado, Medellín <!-- REEMPLAZAR: dirección --></li>
         <li><a href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20reservar%20una%20cita%20en%20su%20centro%20est%C3%A9tico%20en%20Medell%C3%ADn." target="_blank" rel="noopener">WhatsApp +57 300 000 0000</a> <!-- REEMPLAZAR: número --></li>
         <li><a href="https://www.instagram.com/dasa.centroestetico" target="_blank" rel="noopener">@dasa.centroestetico</a> <!-- REEMPLAZAR: Instagram --></li></ul></div>
     </div>
@@ -408,16 +415,45 @@ p{margin:0 0 1em}
     if (img.complete && img.naturalWidth === 0) hide();
   });
 
-  // Formulario de contacto -> mensaje de WhatsApp
+  // Formulario de contacto: valida y abre WhatsApp con el mensaje prellenado
   var form = d.getElementById('form-cita');
   if (form) {
+    var fecha = form.elements.fecha;
+    if (fecha) {
+      var hoy = new Date();
+      fecha.min = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
+    }
+    var setError = function (input, msg) {
+      var box = d.getElementById(input.getAttribute('aria-describedby'));
+      box.textContent = msg;
+      input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      input.classList.toggle('invalid', !!msg);
+    };
+    var checkNombre = function () {
+      var v = form.elements.nombre.value.trim();
+      var m = !v ? 'Escribe tu nombre para poder atenderte.' : (v.length < 2 ? 'El nombre es muy corto.' : '');
+      setError(form.elements.nombre, m); return !m;
+    };
+    var checkTel = function () {
+      var v = form.elements.telefono.value.replace(/[\s\-().]/g, '').replace(/^\+?57/, '');
+      var m = !v ? 'Escribe tu teléfono para confirmar la cita.' : (!/^3\d{9}$/.test(v) ? 'Escribe un celular válido de 10 dígitos, por ejemplo 300 000 0000.' : '');
+      setError(form.elements.telefono, m); return !m;
+    };
+    form.elements.nombre.addEventListener('blur', checkNombre);
+    form.elements.telefono.addEventListener('blur', checkTel);
+    ['nombre', 'telefono'].forEach(function (n) {
+      form.elements[n].addEventListener('input', function () { if (this.classList.contains('invalid')) (n === 'nombre' ? checkNombre : checkTel)(); });
+    });
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
-      var f = new FormData(form);
-      var msg = 'Hola DASA, soy ' + f.get('nombre') + '. Quiero reservar una cita para: ' + f.get('servicio') +
-        '. Preferiría ' + (f.get('fecha') || 'una fecha por definir') + ' en la ' + f.get('jornada') + '.' +
-        (f.get('nota') ? ' Nota: ' + f.get('nota') : '');
-      window.open(form.dataset.wa + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
+      var okN = checkNombre(), okT = checkTel();
+      if (!okN || !okT) { (okN ? form.elements.telefono : form.elements.nombre).focus(); return; }
+      var f = form.elements;
+      var partes = ['Hola DASA, soy ' + f.nombre.value.trim() + '.', 'Mi teléfono es ' + f.telefono.value.trim() + '.'];
+      if (f.servicio.value) partes.push('Me interesa: ' + f.servicio.value + '.');
+      if (f.fecha.value) { var x = f.fecha.value.split('-'); partes.push('Fecha preferida: ' + x[2] + '/' + x[1] + '/' + x[0] + '.'); }
+      if (f.mensaje.value.trim()) partes.push('Mensaje: ' + f.mensaje.value.trim());
+      window.open(form.dataset.wa + '?text=' + encodeURIComponent(partes.join(' ')), '_blank', 'noopener');
     });
   }
 })();
