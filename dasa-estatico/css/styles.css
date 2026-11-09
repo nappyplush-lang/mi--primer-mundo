@@ -118,7 +118,7 @@ p{margin:0 0 1em}
 .promo .btn{background:#fff;color:var(--mauve-600)}
 .promo .btn:hover{background:var(--rose-100)}
 .promo .pic{min-height:260px;position:relative;background:linear-gradient(135deg,var(--rose-200),var(--rose-400))}
-.promo .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.promo .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
 @media (min-width:820px){.promo{grid-template-columns:1fr 1.2fr}}
 
 /* Nosotros / bloques de dos columnas */
