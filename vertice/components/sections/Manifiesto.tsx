@@ -48,7 +48,8 @@ export default function Manifiesto() {
           <RevealImage
             image={manifesto.image}
             sizes="(min-width: 1024px) 56vw, 92vw"
-            className="aspect-[4/5] sm:aspect-[4/3] lg:col-span-7"
+            parallax={false}
+            className="aspect-[16/9] lg:col-span-7"
           />
           <div className="lg:col-span-4 lg:col-start-9">
             <p data-fade className="lead">

@@ -24,10 +24,9 @@ Reemplaza los archivos de `public/images/` **conservando el mismo nombre**. No h
 | Archivo | Dónde aparece | Tamaño mínimo | Proporción |
 |---|---|---|---|
 | `hero.jpg` | Fondo del hero en computador (paisaje/cielo) | 2560 × 1440 | 16:9 |
-| `hero-casa.png` | La casa recortada, fondo transparente, **mismo encuadre** que `hero.jpg` | 2560 × 1440 | 16:9 |
+| `hero-casa.png` | La casa recortada, **fondo transparente**. Va delante del nombre gigante (computador y celular) | 2752 × 1536 | 16:9 |
 | `hero-mobile.jpg` | Fondo del hero en celular | 1440 × 2560 | 9:16 |
-| `hero-casa-mobile.png` | Casa recortada para celular, mismo encuadre que `hero-mobile.jpg` | 1440 × 2560 | 9:16 |
-| `estudio.jpg` | Sección "El estudio" | 2000 × 1500 | 4:3 |
+| `estudio.jpg` | Sección "El estudio" | 2400 × 1350 | 16:9 |
 | `servicio-1.jpg` … `servicio-5.jpg` | Servicios (imagen flotante / acordeón) | 1600 × 2000 | 4:5 |
 | `proyecto-1.jpg` … `proyecto-6.jpg` | Tarjetas de proyectos | 1600 × 2000 | 4:5 |
 | `interior.jpg` | Sección oscura de cifras | 1600 × 2000 | 4:5 |
@@ -35,11 +34,13 @@ Reemplaza los archivos de `public/images/` **conservando el mismo nombre**. No h
 
 Notas del hero:
 
-- El nombre gigante queda **entre** `hero.jpg` y `hero-casa.png`: por eso la casa va en un PNG aparte.
-  Encuadre recomendado: casa centrada, techo a ~38 % de la altura (computador) y ~30 % (celular),
-  y en celular la casa dentro del 70 % central del ancho.
-- Si solo tienes una foto normal (sin recorte), en `site.ts` pon `casa: null` y borra los dos imports
-  `heroCasa…`. El nombre quedará encima de la foto, translúcido.
+- El hero tiene 3 capas: fondo (`hero.jpg` / `hero-mobile.jpg`) → nombre gigante → `hero-casa.png`.
+  La casa se apoya sobre la franja de niebla del fondo, con sombra de contacto, tinte cálido y niebla en la base.
+- Tamaño y posición de la casa: variables `--casa-w` (ancho), `--casa-base` (altura de la base) y `--casa-x`
+  en `app/globals.css`, bloque `.hero-scene` (celular, tablet y computador por separado).
+- Si reemplazas `hero-casa.png`, conserva un margen transparente parecido (~10 % alrededor de la casa);
+  si el margen cambia, ajusta esas variables.
+- Sin casa recortada: en `site.ts` pon `casa: null` y borra el import `heroCasa`.
 - Si cambias un formato (por ejemplo `.jpg` → `.webp`), cambia también el `import` en `site.ts`.
 
 Next genera solo las versiones AVIF/WebP en cada tamaño (calidad 85), así que sube los originales grandes.

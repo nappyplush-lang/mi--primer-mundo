@@ -11,7 +11,6 @@ import type { StaticImageData } from "next/image";
 import hero from "@/public/images/hero.jpg";
 import heroMobile from "@/public/images/hero-mobile.jpg";
 import heroCasa from "@/public/images/hero-casa.png";
-import heroCasaMobile from "@/public/images/hero-casa-mobile.png";
 import estudio from "@/public/images/estudio.jpg";
 import interior from "@/public/images/interior.jpg";
 import servicio1 from "@/public/images/servicio-1.jpg";
@@ -111,16 +110,15 @@ export const site = {
     image: {
       desktop: hero,
       mobile: heroMobile,
-      alt: "Casa contemporánea de dos niveles diseñada por VÉRTICE al atardecer",
+      alt: "Colinas cubiertas de niebla al amanecer, con una casa contemporánea de líneas curvas diseñada por VÉRTICE",
     },
     /**
-     * Recorte PNG de la casa (fondo transparente, mismo encuadre que el fondo).
-     * Hace que el nombre gigante quede DETRÁS de la casa.
-     * Si no lo tienes: pon `casa: null` y borra sus dos imports de arriba.
+     * Casa recortada (PNG con fondo transparente). Se coloca DELANTE del nombre
+     * gigante, apoyada sobre la niebla; la misma imagen sirve para celular.
+     * Tamaño y posición: variables `--casa-*` en app/globals.css.
+     * Si no la tienes: pon `casa: null` y borra su import de arriba.
      */
-    casa: { desktop: heroCasa, mobile: heroCasaMobile } as
-      | { desktop: StaticImageData; mobile: StaticImageData }
-      | null,
+    casa: heroCasa as StaticImageData | null,
     stats: [
       { value: 12, suffix: "+", label: "Años diseñando y construyendo casas de autor" },
       { value: 150, suffix: "+", label: "Casas entregadas en ocho departamentos" },
@@ -130,7 +128,7 @@ export const site = {
   manifesto: {
     eyebrow: "El estudio",
     text: "Creemos que una casa no se decora: se piensa. Cada línea que trazamos responde a la luz, al terreno y a la forma en que vives. Por eso proyectamos pocas casas al año, y cada una como si fuera la nuestra.",
-    image: { src: estudio, alt: "Equipo de VÉRTICE trabajando sobre una maqueta en el estudio" } as Img,
+    image: { src: estudio, alt: "Estudio de VÉRTICE: mesa larga con maquetas y dos arquitectos revisando planos junto a los ventanales" } as Img,
     body: "Somos un equipo de arquitectos, interioristas y constructores que acompaña cada proyecto de principio a fin: desde la primera visita al lote hasta el día en que recibes las llaves.",
     facts: [
       { label: "Fundado en", value: "2012" },
@@ -156,11 +154,11 @@ export const site = {
     title: "Todo lo que tu casa necesita, bajo una sola dirección",
     hint: "Consultar",
     items: [
-      { title: "Arquitectura residencial", text: "Casas nuevas diseñadas desde cero: implantación, volumetría, planos y licencias.", image: { src: servicio1, alt: "Fachada de una casa contemporánea de concreto y madera" } },
-      { title: "Interiorismo", text: "Espacios interiores coherentes con la arquitectura: materiales, mobiliario, iluminación y arte.", image: { src: servicio2, alt: "Sala de doble altura con mobiliario a medida" } },
+      { title: "Arquitectura residencial", text: "Casas nuevas diseñadas desde cero: implantación, volumetría, planos y licencias.", image: { src: servicio1, alt: "Villa contemporánea en ladera con piscina y terrazas iluminadas al atardecer" } },
+      { title: "Interiorismo", text: "Espacios interiores coherentes con la arquitectura: materiales, mobiliario, iluminación y arte.", image: { src: servicio2, alt: "Sala minimalista de doble altura con panelería de roble, sofá curvo y ventanal al jardín" } },
       { title: "Paisajismo", text: "Jardines, terrazas y espejos de agua que integran la casa con su entorno.", image: { src: servicio3, alt: "Jardín con sendero de piedra junto a una casa moderna" } },
       { title: "Remodelaciones", text: "Transformamos casas existentes respetando su carácter y actualizando su desempeño.", image: { src: servicio4, alt: "Cocina remodelada con isla de piedra natural" } },
-      { title: "Consultoría", text: "Análisis de lote, viabilidad normativa y presupuesto antes de que compres o construyas.", image: { src: servicio5, alt: "Arquitecta revisando planos sobre una mesa de trabajo" } },
+      { title: "Consultoría", text: "Análisis de lote, viabilidad normativa y presupuesto antes de que compres o construyas.", image: { src: servicio5, alt: "Arquitectos revisando planos y una maqueta junto a muestras de madera" } },
     ] as { title: string; text: string; image: Img }[],
   },
 
@@ -170,19 +168,19 @@ export const site = {
     hint: "Desliza para ver más",
     labels: { rooms: "hab.", baths: "baños", area: "m²", regionLabel: "Proyectos destacados" },
     items: [
-      { name: "Casa Mirador", location: "Llanogrande, Antioquia", area: 420, rooms: 4, baths: 5, year: 2024, image: { src: proyecto1, alt: "Casa Mirador: volumen horizontal de concreto con ventanales al valle" } },
-      { name: "Casa Patio", location: "El Retiro, Antioquia", area: 310, rooms: 3, baths: 4, year: 2024, image: { src: proyecto2, alt: "Casa Patio: fachada blanca organizada alrededor de un patio central" } },
-      { name: "Casa Bruma", location: "La Calera, Cundinamarca", area: 280, rooms: 3, baths: 3, year: 2023, image: { src: proyecto3, alt: "Casa Bruma: cubierta a dos aguas en madera oscura entre la niebla" } },
-      { name: "Casa Ceiba", location: "Pereira, Risaralda", area: 365, rooms: 4, baths: 4, year: 2023, image: { src: proyecto4, alt: "Casa Ceiba: terraza en voladizo junto a un árbol centenario" } },
-      { name: "Casa Piedra", location: "Villa de Leyva, Boyacá", area: 240, rooms: 3, baths: 2, year: 2022, image: { src: proyecto5, alt: "Casa Piedra: muros de piedra local y carpintería de madera" } },
-      { name: "Casa Horizonte", location: "Barú, Cartagena", area: 510, rooms: 5, baths: 6, year: 2022, image: { src: proyecto6, alt: "Casa Horizonte: piscina infinita frente al mar Caribe" } },
+      { name: "Casa Bruma", location: "La Calera, Cundinamarca", area: 420, rooms: 4, baths: 5, year: 2024, image: { src: proyecto1, alt: "Casa Bruma: volúmenes de vidrio, madera y acero entre pinos y niebla, a la hora azul" } },
+      { name: "Casa Horizonte", location: "Santa Marta, Magdalena", area: 510, rooms: 5, baths: 6, year: 2024, image: { src: proyecto2, alt: "Casa Horizonte: villa sobre un acantilado con piscina infinita frente al mar" } },
+      { name: "Edificio Ceiba", location: "El Poblado, Medellín", area: 310, rooms: 3, baths: 4, year: 2023, image: { src: proyecto3, alt: "Edificio Ceiba: edificio residencial boutique de piedra clara con balcones iluminados" } },
+      { name: "Edificio Travertino", location: "Rosales, Bogotá", area: 280, rooms: 3, baths: 3, year: 2023, image: { src: proyecto4, alt: "Edificio Travertino: fachada de travertino y madera reflejada en un espejo de agua" } },
+      { name: "Casa Mirador", location: "Llanogrande, Antioquia", area: 365, rooms: 4, baths: 4, year: 2022, image: { src: proyecto5, alt: "Casa Mirador: voladizo de concreto y madera sobre una piscina con fogón exterior" } },
+      { name: "Casa Laguna", location: "Guatapé, Antioquia", area: 440, rooms: 4, baths: 5, year: 2022, image: { src: proyecto6, alt: "Casa Laguna: casa blanca de formas curvas con piscina orgánica junto a un lago" } },
     ] as { name: string; location: string; area: number; rooms: number; baths: number; year: number; image: Img }[],
   },
 
   stats: {
     eyebrow: "En cifras",
     title: "Construimos casas de las que nos sentimos orgullosos",
-    image: { src: interior, alt: "Interior de doble altura con chimenea y vista al bosque" } as Img,
+    image: { src: interior, alt: "Sala de doble altura de noche, con chimenea encendida, muros de madera y ventanal al bosque" } as Img,
     items: [
       { value: 12, suffix: "+", label: "Años de experiencia", note: "Construyendo desde 2012" },
       { value: 150, suffix: "+", label: "Casas construidas", note: "En ocho departamentos" },
@@ -211,9 +209,9 @@ export const site = {
     next: "Testimonio siguiente",
     items: [
       { quote: "Llegamos con una carpeta de referencias y salimos con una casa que no se parece a ninguna. Entendieron cómo vivimos antes de dibujar una sola línea.", name: "Laura Restrepo", project: "Casa Mirador", image: { src: testimonio1, alt: "Retrato de Laura Restrepo" } },
-      { quote: "Cumplieron cada fecha del cronograma. Después de dos obras anteriores con otras firmas, eso para nosotros valía más que cualquier render.", name: "Andrés Villegas", project: "Casa Patio", image: { src: testimonio2, alt: "Retrato de Andrés Villegas" } },
-      { quote: "El nivel de detalle es obsesivo. Tres años después, la casa se ve mejor que el día que nos la entregaron.", name: "Mariana Ochoa", project: "Casa Bruma", image: { src: testimonio3, alt: "Retrato de Mariana Ochoa" } },
-      { quote: "Vivíamos fuera del país durante la obra y nunca sentimos que perdíamos el control. Cada semana sabíamos exactamente qué había pasado.", name: "Felipe y Carolina Duque", project: "Casa Horizonte", image: { src: testimonio4, alt: "Retrato de Felipe y Carolina Duque" } },
+      { quote: "Cumplieron cada fecha del cronograma. Después de dos obras anteriores con otras firmas, eso para nosotros valía más que cualquier render.", name: "Andrés Villegas", project: "Casa Bruma", image: { src: testimonio2, alt: "Retrato de Andrés Villegas" } },
+      { quote: "Vivíamos fuera del país durante la obra y nunca sentimos que perdíamos el control. Cada semana sabíamos exactamente qué había pasado.", name: "Felipe y Carolina Duque", project: "Casa Horizonte", image: { src: testimonio3, alt: "Retrato de Felipe y Carolina Duque" } },
+      { quote: "El nivel de detalle es obsesivo. Tres años después, la casa se ve mejor que el día que nos la entregaron.", name: "Mariana Ochoa", project: "Casa Laguna", image: { src: testimonio4, alt: "Retrato de Mariana Ochoa" } },
     ] as { quote: string; name: string; project: string; image: Img }[],
   },
 

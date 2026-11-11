@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { getImageProps } from "next/image";
+import Image, { getImageProps } from "next/image";
 import Button from "@/components/ui/Button";
 import Magnetic from "@/components/ui/Magnetic";
 import { site } from "@/content/site";
@@ -62,7 +62,7 @@ export default function Hero() {
     <section ref={root} id="inicio" aria-label={hero.headline} className="p-2 pb-0 sm:p-3 sm:pb-0">
       <div className="relative isolate h-[calc(100svh-0.5rem)] lg:[--pad:calc(var(--gutter)+0.75rem)] lg:[--padr:calc(var(--gutter)-0.25rem)] min-h-[36rem] overflow-hidden rounded-card bg-carbon text-white sm:h-[calc(100svh-0.75rem)] lg:rounded-panel">
         {/* Escena: fondo → nombre gigante → casa recortada */}
-        <div data-scene className="absolute inset-0">
+        <div data-scene className="hero-scene absolute inset-0">
           <div data-bg className="absolute inset-x-0 -top-[7%] h-[107%]">
             <ArtPicture desktop={hero.image.desktop} mobile={hero.image.mobile} alt={hero.image.alt} priority blur />
           </div>
@@ -72,7 +72,7 @@ export default function Hero() {
               <defs>
                 <linearGradient id="vertice-fade" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0" stopColor="#fff" stopOpacity="0.95" />
-                  <stop offset="1" stopColor="#fff" stopOpacity="0.4" />
+                  <stop offset="1" stopColor="#fff" stopOpacity="0.5" />
                 </linearGradient>
               </defs>
               <text x="0" y="214" textLength="1000" lengthAdjust="spacingAndGlyphs" fontSize="222" fontWeight="600" fill="url(#vertice-fade)" className="font-display">
@@ -81,15 +81,30 @@ export default function Hero() {
             </svg>
           </div>
 
+          {/* Bruma lejana: asienta el nombre en el cielo, por detrás de la casa */}
+          <div aria-hidden="true" className="hero-haze absolute inset-0" />
+
           {hero.casa ? (
-            <div data-casa className="absolute inset-x-0 -top-[7%] h-[107%]">
-              <ArtPicture desktop={hero.casa.desktop} mobile={hero.casa.mobile} alt="" />
+            <div data-casa className="hero-casa absolute">
+              {/* Sombra de contacto */}
+              <div aria-hidden="true" className="hero-casa-shadow absolute" />
+              <Image
+                src={hero.casa}
+                alt=""
+                priority
+                quality={85}
+                sizes="(max-width: 1023px) and (orientation: portrait) 160vw, (max-width: 1023px) 80vw, 66vw"
+                className="hero-casa-img relative block h-auto w-full"
+              />
             </div>
           ) : null}
+
+          {/* Niebla en la base: funde la casa con el paisaje */}
+          <div aria-hidden="true" className="hero-fog absolute inset-x-0" />
         </div>
 
         {/* Degradados para legibilidad del menú y de los textos inferiores */}
-        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/35 to-transparent" />
+        <div aria-hidden="true" className="hero-top absolute inset-x-0 top-0" />
         <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[60%] bg-gradient-to-t from-black/75 via-black/30 to-transparent lg:h-[45%] lg:from-black/55" />
 
         {/* Contenido */}
