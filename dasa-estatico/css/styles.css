@@ -212,3 +212,9 @@ p{margin:0 0 1em}
 .form .err:empty{display:none}
 .form input.invalid{border-color:#a3243b;background:#fff7f8}
 .form .note{margin:0;font-size:.8125rem;color:var(--muted);text-align:center}
+
+/* Servicios como enlaces a WhatsApp */
+.tags li{padding:0}
+.tags li a{display:block;padding:.45rem 1rem;border-radius:999px;transition:background .3s,color .3s}
+.tags li a:hover{background:var(--mauve-500);color:#fff}
+.footer .btn{margin-top:.4rem}

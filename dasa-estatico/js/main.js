@@ -2,6 +2,17 @@
 (function () {
   var d = document, root = d.documentElement;
   var header = d.querySelector('.header');
+
+  // WhatsApp: el número viene de js/config.js; cada enlace trae su mensaje en data-wa
+  var WA_NUMBER = (window.DASA_CONFIG && window.DASA_CONFIG.whatsapp) || '';
+  var waUrl = function (msg) {
+    return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+  };
+  if (WA_NUMBER) {
+    d.querySelectorAll('a[data-wa]').forEach(function (a) { a.href = waUrl(a.getAttribute('data-wa')); });
+    var pretty = '+' + WA_NUMBER.slice(0, 2) + ' ' + WA_NUMBER.slice(2, 5) + ' ' + WA_NUMBER.slice(5, 8) + ' ' + WA_NUMBER.slice(8);
+    d.querySelectorAll('[data-wa-number]').forEach(function (el) { el.textContent = pretty; });
+  }
   var menuBtn = d.querySelector('.menu-btn');
 
   // Menú móvil
@@ -87,7 +98,7 @@
       if (f.servicio.value) partes.push('Me interesa: ' + f.servicio.value + '.');
       if (f.fecha.value) { var x = f.fecha.value.split('-'); partes.push('Fecha preferida: ' + x[2] + '/' + x[1] + '/' + x[0] + '.'); }
       if (f.mensaje.value.trim()) partes.push('Mensaje: ' + f.mensaje.value.trim());
-      window.open(form.dataset.wa + '?text=' + encodeURIComponent(partes.join(' ')), '_blank', 'noopener');
+      window.open(waUrl(partes.join(' ')), '_blank', 'noopener,noreferrer');
     });
   }
 })();

@@ -235,6 +235,12 @@ p{margin:0 0 1em}
 .form input.invalid{border-color:#a3243b;background:#fff7f8}
 .form .note{margin:0;font-size:.8125rem;color:var(--muted);text-align:center}
 
+/* Servicios como enlaces a WhatsApp */
+.tags li{padding:0}
+.tags li a{display:block;padding:.45rem 1rem;border-radius:999px;transition:background .3s,color .3s}
+.tags li a:hover{background:var(--mauve-500);color:#fff}
+.footer .btn{margin-top:.4rem}
+
 </style>
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
@@ -244,7 +250,7 @@ p{margin:0 0 1em}
   "name":"DASA Centro Estético",
   "description":"Centro estético en Medellín: tratamientos faciales, tratamientos corporales y masajes de relajación.",
   "url":"https://www.dasa-ejemplo.com.co/",
-  "telephone":"+573000000000",
+  "telephone":"+573147986180",
   "image":"https://www.dasa-ejemplo.com.co/images/og-image.jpg",
   "priceRange":"$$",
   "address":{"@type":"PostalAddress","streetAddress":"Carrera 00 # 00-00","addressLocality":"Medellín","addressRegion":"Antioquia","postalCode":"050021","addressCountry":"CO"},
@@ -252,7 +258,7 @@ p{margin:0 0 1em}
   "openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"09:00","closes":"18:00"}],
   "sameAs":["https://www.instagram.com/dasa.centroestetico"]
 }
-</script><!-- REEMPLAZAR: todos los datos de este bloque (teléfono, dirección, coordenadas, horario, URLs) -->
+</script><!-- REEMPLAZAR: todos los datos de este bloque (dirección, coordenadas, horario, URLs) -->
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -261,7 +267,7 @@ p{margin:0 0 1em}
   <div class="container">
     <a class="logo" href="index.html" aria-label="DASA Centro Estético, inicio">DASA<small>Centro Estético</small></a>
     <nav class="nav" aria-label="Principal"><a href="index.html" aria-current="page">Inicio</a><a href="servicios.html">Servicios</a><a href="nosotros.html">Nosotros</a><a href="contacto.html">Contacto</a></nav>
-    <a class="btn btn-primary" href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20reservar%20una%20cita%20en%20su%20centro%20est%C3%A9tico%20en%20Medell%C3%ADn." target="_blank" rel="noopener">Reservar cita</a>
+    <a class="btn btn-primary" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20reservar%20una%20cita." data-wa="Hola, vengo de la página web y quiero reservar una cita." target="_blank" rel="noopener noreferrer">Reservar cita</a>
     <button class="menu-btn" aria-label="Abrir menú" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
 </header>
@@ -275,7 +281,7 @@ p{margin:0 0 1em}
       <h1 class="hero-in">Tu piel, tu calma, <em>tu mejor versión.</em></h1>
       <p class="lead hero-in">Tratamientos faciales, corporales y masajes de relajación para cualquier edad y género. Reserva tu cita en un minuto por WhatsApp.</p>
       <div class="actions hero-in">
-        <a class="btn btn-primary" href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20reservar%20una%20cita%20en%20su%20centro%20est%C3%A9tico%20en%20Medell%C3%ADn." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Reservar por WhatsApp</a>
+        <a class="btn btn-primary" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20reservar%20una%20cita." data-wa="Hola, vengo de la página web y quiero reservar una cita." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Reservar por WhatsApp</a>
         <a class="btn btn-ghost" href="servicios.html">Ver servicios</a>
       </div>
     </div>
@@ -295,10 +301,11 @@ p{margin:0 0 1em}
     <h2 class="reveal">Elige tu momento de bienestar</h2>
     <p class="lead reveal">Tres experiencias pensadas para cuidarte de pies a cabeza en el corazón de Medellín.</p>
     <div class="cards">
-      <a class="card reveal" href="servicios.html#faciales"><div class="oval"><img src="images/servicio-facial.jpg" alt="Tratamiento facial de limpieza e hidratación" loading="lazy" width="600" height="800"></div><h3>Tratamientos faciales</h3><p>Limpieza profunda, hidratación y luminosidad para una piel sana.</p><span class="link">Ver más</span></a>
-      <a class="card reveal" href="servicios.html#corporales"><div class="oval"><img src="images/servicio-corporal.jpg" alt="Tratamiento corporal de exfoliación y modelado" loading="lazy" width="600" height="800"></div><h3>Tratamientos corporales</h3><p>Drenaje, exfoliación y modelado para sentirte ligera y ligero.</p><span class="link">Ver más</span></a>
-      <a class="card reveal" href="servicios.html#masajes"><div class="oval"><img src="images/servicio-masajes.jpg" alt="Masaje de relajación con aceites aromáticos" loading="lazy" width="600" height="800"></div><h3>Masajes de relajación</h3><p>Alivia el estrés y suelta la tensión con manos expertas.</p><span class="link">Ver más</span></a>
+      <a class="card reveal" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20el%20servicio%20de%20Limpieza%20e%20hidrataci%C3%B3n%20facial." data-wa="Hola, vengo de la página web y quiero el servicio de Limpieza e hidratación facial." target="_blank" rel="noopener noreferrer"><div class="oval"><img src="images/servicio-facial.jpg" alt="Tratamiento facial de limpieza e hidratación" loading="lazy" width="600" height="800"></div><h3>Tratamientos faciales</h3><p>Limpieza profunda, hidratación y luminosidad para una piel sana.</p><span class="link">Reservar este servicio</span></a>
+      <a class="card reveal" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20el%20servicio%20de%20Exfoliaci%C3%B3n%20y%20moldeado%20corporal." data-wa="Hola, vengo de la página web y quiero el servicio de Exfoliación y moldeado corporal." target="_blank" rel="noopener noreferrer"><div class="oval"><img src="images/servicio-corporal.jpg" alt="Tratamiento corporal de exfoliación y modelado" loading="lazy" width="600" height="800"></div><h3>Tratamientos corporales</h3><p>Drenaje, exfoliación y modelado para sentirte ligera y ligero.</p><span class="link">Reservar este servicio</span></a>
+      <a class="card reveal" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20el%20servicio%20de%20Masaje%20relajante%20con%20aceites%20arom%C3%A1ticos." data-wa="Hola, vengo de la página web y quiero el servicio de Masaje relajante con aceites aromáticos." target="_blank" rel="noopener noreferrer"><div class="oval"><img src="images/servicio-masajes.jpg" alt="Masaje de relajación con aceites aromáticos" loading="lazy" width="600" height="800"></div><h3>Masajes de relajación</h3><p>Alivia el estrés y suelta la tensión con manos expertas.</p><span class="link">Reservar este servicio</span></a>
     </div>
+    <p class="reveal" style="margin-top:2.5rem"><a class="link" href="servicios.html">Ver todos los servicios</a></p>
   </div>
 </section>
 
@@ -309,7 +316,7 @@ p{margin:0 0 1em}
         <span class="eyebrow">Primera visita</span>
         <h2>Valoración inicial sin costo</h2>
         <p>Cuéntanos qué necesitas y diseñamos un plan a tu medida. Escríbenos y separa tu espacio hoy.</p>
-        <a class="btn" href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20agendar%20mi%20valoraci%C3%B3n%20inicial%20gratuita." target="_blank" rel="noopener">Agendar valoración</a>
+        <a class="btn" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20agendar%20la%20valoraci%C3%B3n%20inicial%20gratuita." data-wa="Hola, vengo de la página web y quiero agendar la valoración inicial gratuita." target="_blank" rel="noopener noreferrer">Agendar valoración</a>
       </div>
       <div class="pic"><img src="images/promo.jpg" alt="Productos y ambiente del centro estético DASA" loading="lazy" width="900" height="700"></div>
     </div>
@@ -356,18 +363,35 @@ p{margin:0 0 1em}
       <div><h4>Servicios</h4><ul><li>Tratamientos faciales</li><li>Tratamientos corporales</li><li>Masajes de relajación</li></ul></div>
       <div><h4>Contacto</h4><ul>
         <li>Carrera 00 # 00-00, El Poblado, Medellín <!-- REEMPLAZAR: dirección --></li>
-        <li><a href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20reservar%20una%20cita%20en%20su%20centro%20est%C3%A9tico%20en%20Medell%C3%ADn." target="_blank" rel="noopener">WhatsApp +57 300 000 0000</a> <!-- REEMPLAZAR: número --></li>
+        <li>WhatsApp: <span data-wa-number>+57 314 798 6180</span></li>
+        <li><a class="btn btn-primary" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20reservar%20una%20cita." data-wa="Hola, vengo de la página web y quiero reservar una cita." target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Reservar por WhatsApp</a></li>
         <li><a href="https://www.instagram.com/dasa.centroestetico" target="_blank" rel="noopener">@dasa.centroestetico</a> <!-- REEMPLAZAR: Instagram --></li></ul></div>
     </div>
     <div class="copy">© <span id="y">2026</span> DASA Centro Estético · Medellín, Colombia</div>
   </div>
 </footer>
-<a class="wa-float" href="https://wa.me/573000000000?text=Hola%20DASA%2C%20quiero%20reservar%20una%20cita%20en%20su%20centro%20est%C3%A9tico%20en%20Medell%C3%ADn." target="_blank" rel="noopener" aria-label="Reservar por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+<a class="wa-float" href="https://wa.me/?text=Hola%2C%20vengo%20de%20la%20p%C3%A1gina%20web%20y%20quiero%20reservar%20una%20cita." data-wa="Hola, vengo de la página web y quiero reservar una cita." target="_blank" rel="noopener noreferrer" aria-label="Reservar por WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
 <script>
+/* Configuración de DASA.
+   Para cambiar el número de WhatsApp edita SOLO esta línea:
+   código de país + número, solo dígitos (57 = Colombia). */
+window.DASA_CONFIG = { whatsapp: '573147986180' };
+
 /* DASA · interacciones ligeras (sin dependencias) */
 (function () {
   var d = document, root = d.documentElement;
   var header = d.querySelector('.header');
+
+  // WhatsApp: el número viene de js/config.js; cada enlace trae su mensaje en data-wa
+  var WA_NUMBER = (window.DASA_CONFIG && window.DASA_CONFIG.whatsapp) || '';
+  var waUrl = function (msg) {
+    return 'https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg);
+  };
+  if (WA_NUMBER) {
+    d.querySelectorAll('a[data-wa]').forEach(function (a) { a.href = waUrl(a.getAttribute('data-wa')); });
+    var pretty = '+' + WA_NUMBER.slice(0, 2) + ' ' + WA_NUMBER.slice(2, 5) + ' ' + WA_NUMBER.slice(5, 8) + ' ' + WA_NUMBER.slice(8);
+    d.querySelectorAll('[data-wa-number]').forEach(function (el) { el.textContent = pretty; });
+  }
   var menuBtn = d.querySelector('.menu-btn');
 
   // Menú móvil
@@ -453,7 +477,7 @@ p{margin:0 0 1em}
       if (f.servicio.value) partes.push('Me interesa: ' + f.servicio.value + '.');
       if (f.fecha.value) { var x = f.fecha.value.split('-'); partes.push('Fecha preferida: ' + x[2] + '/' + x[1] + '/' + x[0] + '.'); }
       if (f.mensaje.value.trim()) partes.push('Mensaje: ' + f.mensaje.value.trim());
-      window.open(form.dataset.wa + '?text=' + encodeURIComponent(partes.join(' ')), '_blank', 'noopener');
+      window.open(waUrl(partes.join(' ')), '_blank', 'noopener,noreferrer');
     });
   }
 })();

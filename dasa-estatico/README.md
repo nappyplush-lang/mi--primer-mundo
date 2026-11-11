@@ -9,7 +9,7 @@ Páginas: `index.html`, `servicios.html`, `nosotros.html`, `contacto.html`, `404
 ## Lista REEMPLAZAR (busca `REEMPLAZAR` en el código)
 Datos de ejemplo actuales y dónde cambiarlos:
 - [ ] Dirección `Carrera 00 # 00-00, El Poblado, Medellín`: `contacto.html`, footer de todas las páginas y JSON-LD (`streetAddress`, código postal, coordenadas) en `index.html` y `contacto.html`
-- [ ] Teléfono `300 000 0000` / WhatsApp `573000000000`: todos los enlaces `wa.me`, el `data-wa` y el `action` del formulario de `contacto.html`, y `telephone` del JSON-LD
+- [x] WhatsApp real `57 314 798 6180`: se cambia en UNA línea, `js/config.js` (`whatsapp: '573147986180'`). Todos los botones y el formulario leen ese valor. `index.html` lleva `config.js` y `main.js` incrustados: si cambias el número, cambia también la línea `window.DASA_CONFIG` dentro del `<script>` de `index.html`. Además actualiza `telephone` en el JSON-LD (`index.html` y `contacto.html`).
 - [ ] Horario `Lun a Sáb, 9:00 a. m. a 6:00 p. m.`: `contacto.html`, barra superior y JSON-LD (`opens` / `closes`)
 - [ ] Dominio `https://www.dasa-ejemplo.com.co`: canonical, og:url, og:image, JSON-LD, `robots.txt` y `sitemap.xml`
 - [ ] Instagram `@dasa.centroestetico`: footer, Inicio y Contacto
