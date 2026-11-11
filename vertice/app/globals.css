@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Colores del sistema (R G B). Cámbialos aquí y cambia todo el sitio. ── */
+:root {
+  --hueso: 247 245 242; /* #F7F5F2 fondo */
+  --carbon: 20 20 20; /* #141414 texto y botones */
+  --piedra: 138 134 128; /* #8A8680 detalles */
+  --piedra-texto: 104 100 95; /* gris piedra oscurecido para texto (contraste AA) */
+  --arena: 184 145 106; /* #B8916A acento */
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5.5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html:not(.lenis) {
+      scroll-behavior: smooth;
+    }
+  }
+  html.scroll-locked {
+    overflow: hidden;
+  }
+  body {
+    @apply bg-hueso font-body text-base leading-relaxed text-carbon antialiased;
+    overflow-x: clip;
+    -webkit-tap-highlight-color: transparent;
+  }
+  ::selection {
+    @apply bg-carbon text-hueso;
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--arena));
+    outline-offset: 3px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  .wrap {
+    @apply mx-auto w-full max-w-[1440px];
+    padding-left: max(var(--gutter), env(safe-area-inset-left));
+    padding-right: max(var(--gutter), env(safe-area-inset-right));
+  }
+  .section {
+    padding-top: clamp(5rem, 11vw, 10rem);
+    padding-bottom: clamp(5rem, 11vw, 10rem);
+  }
+  .eyebrow {
+    @apply flex items-center gap-3 text-sm font-medium uppercase tracking-[0.16em] text-piedra-texto;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply h-px w-8 bg-arena;
+  }
+  .h2 {
+    @apply font-display font-light leading-[1.04] tracking-[-0.035em];
+    font-size: clamp(2.25rem, 5.4vw, 4.75rem);
+  }
+  .lead {
+    @apply text-piedra-texto;
+    font-size: clamp(1rem, 1.25vw, 1.125rem);
+    line-height: 1.7;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Líneas del split text: aire para descendentes y acentos */
+.split-line {
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+/* Hero: posición del nombre gigante según el encuadre (vertical / horizontal) */
+.hero-word {
+  top: 19.5%;
+}
+/* Tablets en vertical (pantallas más "cuadradas") */
+@media (orientation: portrait) and (min-aspect-ratio: 2/3) {
+  .hero-word {
+    top: 10.5%;
+  }
+}
+@media (min-width: 1024px), (orientation: landscape) {
+  .hero-word {
+    top: max(15%, 9rem);
+  }
+}
+
+/* Preloader: si el JS fallara, se retira solo */
+@keyframes preloader-failsafe {
+  to {
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+.preloader {
+  animation: preloader-failsafe 0.4s 4s forwards;
+}
+
+/* Proyectos: cuando GSAP fija la sección, el carrusel deja de ser scrollable */
+.is-pinned [data-viewport] {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

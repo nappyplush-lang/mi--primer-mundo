@@ -10,6 +10,7 @@ Una carpeta por página. Cada una se abre con su `index.html`.
 | `dasa/` | Código fuente (Next.js) de Dasa, centro estético |
 | `dasa-estatico/` | DASA en HTML, CSS y JS puros (4 páginas, SEO local Medellín). Ver su README con la lista REEMPLAZAR |
 | `dasa-web/` | Dasa ya compilada para GitHub Pages (no editar; se genera con `npm run build:pages` en `dasa/`) |
+| `vertice/` | Landing (Next.js 15 + GSAP) de VÉRTICE, estudio de arquitectura. Se despliega en Vercel con Root Directory `vertice`. Ver su README |
 
 Link público de ISA: https://nappyplush-lang.github.io/mi--primer-mundo/ (redirige a `isa-gourmet/`).
 
