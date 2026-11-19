@@ -10,7 +10,7 @@
   <!-- Vista previa al compartir el link por WhatsApp o redes -->
   <meta property="og:title" content="Imperial Barber | Reserva tu cita">
   <meta property="og:description" content="Elige tu barbero, el día y la hora. Confirma por WhatsApp.">
-  <meta property="og:image" content="https://nappyplush-lang.github.io/mi--primer-mundo/imperial-barber/img/hero.jpg">
+  <meta property="og:image" content="https://nappyplush-lang.github.io/mi--primer-mundo/imperial-barber/img/hero-pc.jpg">
   <meta property="og:url" content="https://nappyplush-lang.github.io/mi--primer-mundo/imperial-barber/">
   <meta property="og:type" content="website">
 
@@ -40,6 +40,16 @@
   <main>
     <!-- ===================== HERO ===================== -->
     <section class="hero" id="inicio">
+      <!-- Fotos: en celular se usa img/hero.jpg (vertical) y en computador img/hero-pc.jpg (horizontal).
+           Si no existen, se ve el recuadro gris. -->
+      <div class="ph hero__img" data-label="Foto de fondo · img/hero.jpg (vertical 3:4)" data-label-pc="Foto de fondo · img/hero-pc.jpg (horizontal 16:9)">
+        <picture>
+          <source media="(min-width: 900px)" srcset="img/hero-pc.jpg">
+          <img src="img/hero.jpg" alt="Silla de barbero bajo una lámpara en Imperial Barber" fetchpriority="high" onerror="this.closest('picture').remove()">
+        </picture>
+      </div>
+      <div class="hero__shade" aria-hidden="true"></div>
+
       <div class="wrap hero__in">
         <div class="hero__text">
           <h1 class="hero__title">
@@ -51,11 +61,6 @@
             Reservar cita
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
-        </div>
-
-        <!-- Foto: reemplaza img/hero.jpg y aparece sola. Si no existe, se ve el recuadro gris. -->
-        <div class="ph hero__img" data-label="Foto de fondo · img/hero.jpg (vertical 3:4)">
-          <img src="img/hero.jpg" alt="Silla de barbero bajo una lámpara en Imperial Barber" fetchpriority="high" onerror="this.remove()">
         </div>
       </div>
     </section>

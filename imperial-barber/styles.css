@@ -168,27 +168,17 @@ h1, h2, h3, p { margin: 0; }
 @media (max-width: 420px) { .nav__name { display: none; } }
 
 /* =========================================================
-   HERO
-   Celular: la foto ocupa todo el fondo y el texto va abajo.
-   Computador: texto a la izquierda y foto a la derecha.
+   HERO (pantalla completa en celular y en computador)
+   Celular: foto vertical de fondo y el texto abajo.
+   Computador: foto horizontal de fondo y el texto a la izquierda.
    ========================================================= */
-.hero { position: relative; }
-.hero__in {
-  position: relative;
-  min-height: 92vh;
-  min-height: 92svh;
-  display: flex;
-  align-items: flex-end;
-  padding-bottom: 40px;
-}
-.hero__img {
-  position: absolute;
-  inset: 0;
-}
+.hero { position: relative; overflow: hidden; }
+.hero__img { position: absolute; inset: 0; }
+.hero__img picture { position: absolute; inset: 0; z-index: 1; }
+.hero__img img { object-position: 50% 40%; }
 .hero__img::after { inset: 30% 0 auto 0; transform: none; }
 /* Degradado para que el texto se lea sobre la foto */
-.hero__in::before {
-  content: "";
+.hero__shade {
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -197,7 +187,16 @@ h1, h2, h3, p { margin: 0; }
     linear-gradient(180deg, rgba(11,11,12,.6) 0%, rgba(11,11,12,0) 18%),
     linear-gradient(0deg, var(--negro) 4%, rgba(11,11,12,.88) 34%, rgba(11,11,12,0) 64%);
 }
-.hero__text { position: relative; z-index: 3; animation: subir .8s var(--ease) both; }
+.hero__in {
+  position: relative;
+  z-index: 3;
+  min-height: 92vh;
+  min-height: 92svh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 40px;
+}
+.hero__text { animation: subir .8s var(--ease) both; }
 .hero__title {
   font-family: var(--serif);
   font-weight: 500;
@@ -220,26 +219,23 @@ h1, h2, h3, p { margin: 0; }
 .hero__btn { margin-top: 26px; }
 
 @media (min-width: 900px) {
+  /* La silla está a la derecha de la foto: se mantiene visible al recortar */
+  .hero__img img { object-position: 72% 22%; }
+  .hero__img::after { content: attr(data-label-pc); inset: 45% 0 auto 45%; }
+  .hero__shade {
+    background:
+      linear-gradient(180deg, rgba(11,11,12,.55) 0%, rgba(11,11,12,0) 16%),
+      linear-gradient(0deg, var(--negro) 0%, rgba(11,11,12,0) 22%),
+      linear-gradient(90deg, rgba(11,11,12,.85) 0%, rgba(11,11,12,.5) 34%, rgba(11,11,12,0) 58%);
+  }
   .hero__in {
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1.1fr .9fr;
+    min-height: 100svh;
     align-items: center;
-    gap: 64px;
-    padding-top: 110px;
-    padding-bottom: 70px;
+    padding-top: 90px;
+    padding-bottom: 90px;
   }
-  .hero__in::before { display: none; }
-  .hero__img {
-    position: relative;
-    inset: auto;
-    aspect-ratio: 3 / 4;
-    max-height: 78vh;
-    width: 100%;
-    justify-self: end;
-    border-radius: 24px;
-  }
-  .hero__title { font-size: clamp(76px, 8.4vw, 124px); }
+  .hero__title { font-size: clamp(76px, 7.4vw, 120px); }
   .hero__lead { font-size: 18px; margin-top: 26px; }
   .hero__btn { margin-top: 34px; }
 }

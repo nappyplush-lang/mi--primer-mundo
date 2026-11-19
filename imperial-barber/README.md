@@ -10,7 +10,7 @@ elige barbero, servicio, día y hora, y confirma por WhatsApp. No se instala.
 | `index.html` | La página: inicio, barberos, agenda y pie de página |
 | `styles.css` | Diseño. Los colores están al inicio, en `:root` |
 | `script.js` | Lógica. **Barberos, servicios, precios, horario y WhatsApp están al inicio, en `CONFIG`** |
-| `img/` | Fotos: `hero.jpg`, `barbero1.jpg`, `barbero2.jpg`. Ver `img/LEEME.txt` |
+| `img/` | Fotos: `hero.jpg` (celular), `hero-pc.jpg` (computador), `barbero1.jpg`, `barbero2.jpg`. Ver `img/LEEME.txt` |
 
 ## Links
 

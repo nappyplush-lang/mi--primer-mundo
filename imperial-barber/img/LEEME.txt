@@ -1,6 +1,8 @@
 Pon aquí tus fotos con estos nombres exactos (en minúscula) y aparecen solas, sin tocar código:
 
-  hero.jpg       Foto principal. Vertical 3:4, 1200 x 1600.
+  hero.jpg       Foto principal en celular. Vertical 3:4, 1200 x 1600.
+  hero-pc.jpg    Foto principal en computador. Horizontal 16:9, 2400 x 1350.
+                 Deja el lado izquierdo oscuro (ahí va el texto).
   barbero1.jpg   Foto del Barbero 1. Vertical 4:5, 800 x 1000.
   barbero2.jpg   Foto del Barbero 2. Vertical 4:5, 800 x 1000.
 
