@@ -1,5 +1,5 @@
 /* =========================================================
-   IMPERIAL BARBER · Lógica de la app
+   IMPERIAL BARBER · Lógica de la página
    ========================================================= */
 
 /* ---------------------------------------------------------
@@ -39,7 +39,7 @@ const CONFIG = {
   // Cuántos meses hacia adelante se puede agendar
   mesesAdelante: 2,
 
-  // Texto que aparece al final de la pantalla de inicio
+  // Texto del pie de página
   textoHorario: "Lunes a domingo · 9:00 a. m. a 7:00 p. m.",
 };
 
@@ -58,6 +58,7 @@ const estado = {
    Utilidades
    --------------------------------------------------------- */
 const $ = (sel) => document.querySelector(sel);
+const esCelular = () => matchMedia("(max-width: 899px)").matches;
 
 const formatoPrecio = new Intl.NumberFormat("es-CO", {
   style: "currency", currency: "COP", maximumFractionDigits: 0,
@@ -87,19 +88,27 @@ const mismoDia = (a, b) => a && b && a.getTime() === b.getTime();
 const linkWhatsApp = (texto) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
 
 // Pone la foto dentro de un recuadro; si la foto no existe, se queda el recuadro gris con el texto
-function ponerFoto(contenedor, src, etiqueta) {
+function ponerFoto(contenedor, src, etiqueta, alt = "") {
   contenedor.innerHTML = "";
   contenedor.dataset.label = etiqueta;
   const img = new Image();
-  img.alt = "";
+  img.alt = alt;
   img.decoding = "async";
+  img.loading = "lazy";
   img.onerror = () => img.remove();
   img.src = src;
   contenedor.appendChild(img);
 }
 
+// Desplaza la página suavemente hasta un elemento
+function irA(selector, espera = 180) {
+  const el = typeof selector === "string" ? $(selector) : selector;
+  if (!el) return;
+  setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), espera);
+}
+
 /* ---------------------------------------------------------
-   PANTALLA 1: tarjetas de barberos
+   Tarjetas de barberos
    --------------------------------------------------------- */
 function pintarBarberos() {
   const lista = $("#lista-barberos");
@@ -109,6 +118,8 @@ function pintarBarberos() {
     const tarjeta = document.createElement("button");
     tarjeta.type = "button";
     tarjeta.className = "barbero";
+    tarjeta.dataset.id = b.id;
+    tarjeta.setAttribute("aria-pressed", "false");
     tarjeta.setAttribute("aria-label", `Agendar con ${b.nombre}`);
     tarjeta.innerHTML = `
       <div class="ph barbero__foto"></div>
@@ -122,22 +133,17 @@ function pintarBarberos() {
       </span>`;
     tarjeta.querySelector(".barbero__nombre").textContent = b.nombre;
     tarjeta.querySelector(".barbero__rol").textContent = b.rol || "";
-    ponerFoto(tarjeta.querySelector(".barbero__foto"), b.foto, `Foto ${b.nombre} · ${b.foto} (4:5)`);
+    ponerFoto(tarjeta.querySelector(".barbero__foto"), b.foto, `Foto ${b.nombre} · ${b.foto} (4:5)`, b.nombre);
 
-    tarjeta.addEventListener("click", () => {
-      navegoDesdeInicio = true;
-      location.hash = `#/agenda/${b.id}`;
-    });
+    tarjeta.addEventListener("click", () => abrirAgenda(b, true));
     lista.appendChild(tarjeta);
   });
-
-  $("#texto-horario").textContent = CONFIG.textoHorario;
 }
 
 /* ---------------------------------------------------------
-   PANTALLA 2: agenda
+   Agenda (aparece debajo al elegir barbero, sin recargar)
    --------------------------------------------------------- */
-function abrirAgenda(barbero) {
+function abrirAgenda(barbero, desplazar) {
   // Si cambia de barbero, empieza la reserva de cero
   if (estado.barbero !== barbero) {
     estado.barbero = barbero;
@@ -151,14 +157,26 @@ function abrirAgenda(barbero) {
     estado.mesVisible = new Date(h.getFullYear(), h.getMonth(), 1);
   }
 
+  // Marca la tarjeta elegida
+  document.querySelectorAll(".barbero").forEach((t) => t.setAttribute("aria-pressed", String(t.dataset.id === barbero.id)));
+
   $("#perfil-nombre").textContent = barbero.nombre;
-  ponerFoto($("#perfil-foto"), barbero.foto, "Foto");
+  ponerFoto($("#perfil-foto"), barbero.foto, "Foto", barbero.nombre);
 
   pintarServicios();
   pintarCalendario();
   pintarHoras();
   actualizarResumen();
-  $("#pantalla-agenda").scrollTop = 0;
+
+  $("#agenda").hidden = false;
+
+  // El link queda listo para compartir: .../imperial-barber/#barbero1
+  history.replaceState(null, "", `#${barbero.id}`);
+
+  if (desplazar) {
+    irA("#agenda", 60);
+    setTimeout(() => $("#perfil-nombre").focus({ preventScroll: true }), 700);
+  }
 }
 
 /* --- Servicios --- */
@@ -185,7 +203,7 @@ function pintarServicios() {
       estado.servicio = s;
       lista.querySelectorAll(".servicio").forEach((el) => el.setAttribute("aria-checked", String(el === btn)));
       actualizarResumen();
-      if (primeraVez && !estado.dia) irA("#paso-dia");
+      if (primeraVez && !estado.dia && esCelular()) irA("#paso-dia");
     });
     lista.appendChild(btn);
   });
@@ -231,7 +249,7 @@ function pintarCalendario() {
       contenedor.querySelectorAll(".dia").forEach((el) => el.setAttribute("aria-pressed", String(el === btn)));
       pintarHoras();
       actualizarResumen();
-      if (estado.hora === null) irA("#paso-hora");
+      if (estado.hora === null && esCelular()) irA("#paso-hora");
     });
     contenedor.appendChild(btn);
   }
@@ -278,7 +296,7 @@ function pintarHoras() {
       estado.hora = hh;
       lista.querySelectorAll(".hora").forEach((el) => el.setAttribute("aria-checked", String(el === btn)));
       actualizarResumen();
-      irA("#resumen");
+      if (esCelular()) irA("#resumen");
     });
     lista.appendChild(btn);
   }
@@ -327,95 +345,29 @@ function confirmarCita() {
   else location.href = url; // si el navegador bloquea la ventana nueva, abre en la misma
 }
 
-// Desplaza la agenda suavemente hasta el siguiente paso
-function irA(selector) {
-  const el = $(selector);
-  if (!el) return;
-  setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 180);
-}
-
 /* ---------------------------------------------------------
-   Navegación entre pantallas (sin recargar)
-   #/                  -> inicio
-   #/agenda/barbero1   -> agenda de ese barbero (también sirve como link directo)
+   Limpieza: la versión anterior se podía instalar como app.
+   Esto la desinstala en los celulares que alcanzaron a abrirla.
    --------------------------------------------------------- */
-let navegoDesdeInicio = false;
-
-function mostrarPantalla(nombre) {
-  const inicio = $("#pantalla-inicio");
-  const agenda = $("#pantalla-agenda");
-  const enAgenda = nombre === "agenda";
-
-  $("#app").dataset.screen = nombre;
-  inicio.classList.toggle("is-active", !enAgenda);
-  agenda.classList.toggle("is-active", enAgenda);
-
-  // Accesibilidad: la pantalla oculta no recibe foco ni lectura
-  inicio.toggleAttribute("inert", enAgenda);
-  agenda.toggleAttribute("inert", !enAgenda);
-  inicio.setAttribute("aria-hidden", String(enAgenda));
-  agenda.setAttribute("aria-hidden", String(!enAgenda));
-
-  const titulo = enAgenda ? $("#perfil-nombre") : $(".hero__title");
-  setTimeout(() => titulo.focus({ preventScroll: true }), 50);
-}
-
-function enrutar() {
-  const partes = location.hash.replace(/^#\/?/, "").split("/");
-  if (partes[0] === "agenda") {
-    const barbero = CONFIG.barberos.find((b) => b.id === partes[1]);
-    if (barbero) {
-      abrirAgenda(barbero);
-      mostrarPantalla("agenda");
-      return;
-    }
-  }
-  mostrarPantalla("inicio");
-}
-
-function volver() {
-  // Si llegó desde el inicio, usa el "atrás" normal; si entró por link directo, va al inicio
-  if (navegoDesdeInicio) history.back();
-  else location.hash = "#/";
-  navegoDesdeInicio = false;
-}
-
-/* ---------------------------------------------------------
-   Instalar como app (PWA)
-   --------------------------------------------------------- */
-let avisoInstalar = null;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  avisoInstalar = e;
-  $("#btn-instalar").hidden = false;
-});
-
-$("#btn-instalar").addEventListener("click", async () => {
-  if (!avisoInstalar) return;
-  avisoInstalar.prompt();
-  await avisoInstalar.userChoice;
-  avisoInstalar = null;
-  $("#btn-instalar").hidden = true;
-});
-
-window.addEventListener("appinstalled", () => { $("#btn-instalar").hidden = true; });
-
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js").catch(() => {});
-  });
+  navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister())).catch(() => {});
+  if (window.caches) caches.keys().then((claves) => claves.forEach((c) => caches.delete(c))).catch(() => {});
 }
 
 /* ---------------------------------------------------------
    Arranque
    --------------------------------------------------------- */
 $("#fab-whatsapp").href = linkWhatsApp(CONFIG.mensajeFlotante);
-$("#btn-volver").addEventListener("click", volver);
 $("#cal-prev").addEventListener("click", () => cambiarMes(-1));
 $("#cal-next").addEventListener("click", () => cambiarMes(1));
 $("#btn-confirmar").addEventListener("click", confirmarCita);
-window.addEventListener("hashchange", enrutar);
+$("#texto-horario").textContent = CONFIG.textoHorario;
+$("#anio").textContent = new Date().getFullYear();
 
 pintarBarberos();
-enrutar();
+
+// Link directo a un barbero: .../imperial-barber/#barbero1
+// (también acepta el formato anterior #/agenda/barbero1)
+const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
+const barberoInicial = CONFIG.barberos.find((b) => b.id === idInicial);
+if (barberoInicial) abrirAgenda(barberoInicial, true);
