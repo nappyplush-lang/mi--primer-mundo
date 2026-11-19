@@ -1,9 +1,9 @@
 Pon aquí tus fotos con estos nombres exactos (en minúscula) y aparecen solas, sin tocar código:
 
-  hero.jpg       Foto de fondo del inicio. Vertical, mínimo 1080 x 1350.
-  barbero1.jpg   Foto del Barbero 1. Vertical 4:5, ej. 800 x 1000.
-  barbero2.jpg   Foto del Barbero 2. Vertical 4:5, ej. 800 x 1000.
+  hero.jpg       Foto principal. Vertical 3:4, 1200 x 1600.
+  barbero1.jpg   Foto del Barbero 1. Vertical 4:5, 800 x 1000.
+  barbero2.jpg   Foto del Barbero 2. Vertical 4:5, 800 x 1000.
 
-icons/icon-192.png e icons/icon-512.png son los íconos de la app (cuadrados, PNG).
-Los actuales son de prueba; reemplázalos con el logo manteniendo nombre y tamaño.
-Consejo: que cada foto pese menos de 400 KB para que la app abra rápido.
+icons/icon-192.png es el ícono de la pestaña del navegador; icons/apple-touch-icon.png
+el de los favoritos en iPhone. Reemplázalos con el logo manteniendo nombre y tamaño.
+Consejo: que cada foto pese menos de 400 KB para que la página abra rápido.
