@@ -19,7 +19,7 @@ const CONFIG = {
   negocio: "Imperial Barber",
 
   // Número con código de país (57 = Colombia), sin + ni espacios
-  whatsapp: "573147986180",
+  whatsapp: "573114884459",
 
   // Mensaje del botón flotante verde
   mensajeFlotante: "Hola Imperial Barber, quiero agendar una cita",
