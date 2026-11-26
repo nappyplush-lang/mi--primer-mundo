@@ -9,7 +9,7 @@
    solo abre WhatsApp, como antes. Es la única línea que cambias
    para conectar o cambiar de hoja.
    --------------------------------------------------------- */
-const URL_APPS_SCRIPT = "";
+const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwBop-mDfpc8PZ6O9CI7Tl1eV7T4z8oD-j2ePoYYrBbI8HQmCWDyDqhH5dM0pN6wsjX/exec";
 
 /* ---------------------------------------------------------
    CONFIGURACIÓN: cambia aquí nombres, servicios, precios,
