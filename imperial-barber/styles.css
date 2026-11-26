@@ -680,3 +680,7 @@ h1, h2, h3, p { margin: 0; }
 .btn-confirmar.cargando svg { animation: latido 1s ease-in-out infinite; }
 @keyframes latido { 50% { opacity: .35; } }
 .confirmar.con-aviso .confirmar__hint { display: none; }
+
+/* --- Mensaje en la zona de barberos (cargando, sin barberos) --- */
+.barberos__estado { grid-column: 1 / -1; padding: 24px 0; color: var(--gris-claro); font-size: 15px; }
+.barberos__estado a { color: var(--dorado); text-decoration: underline; text-underline-offset: 3px; }

@@ -5,7 +5,10 @@ elige barbero, servicio, día, hora y escribe su nombre; la cita se guarda en tu
 Google Sheet y luego se confirma por WhatsApp. No se instala.
 
 Para conectar la hoja de citas sigue `apps-script/LEEME.md`. Mientras
-`urlHojaCitas` esté vacío en `script.js`, la página solo abre WhatsApp.
+`URL_APPS_SCRIPT` esté vacío en `script.js`, la página solo abre WhatsApp.
+
+La hoja tiene 3 pestañas: **Barberos** (quién aparece), **Citas** (las reservas) y
+**Descansos** (horas o días bloqueados por barbero).
 
 ## Archivos
 
@@ -13,8 +16,8 @@ Para conectar la hoja de citas sigue `apps-script/LEEME.md`. Mientras
 |---|---|
 | `index.html` | La página: inicio, barberos, agenda y pie de página |
 | `styles.css` | Diseño. Los colores están al inicio, en `:root` |
-| `script.js` | Lógica. **Barberos, servicios, precios, horario y WhatsApp están al inicio, en `CONFIG`** |
-| `apps-script/Código.gs` | Código para tu Google Sheet: guarda las citas y dice qué horas están ocupadas. Paso a paso en `apps-script/LEEME.md` |
+| `script.js` | Lógica. **El link de la hoja (`URL_APPS_SCRIPT`) es la primera línea; barberos, servicios, precios, horario y WhatsApp están en `CONFIG`** |
+| `apps-script/Code.gs` | Código que se pega en Apps Script (dentro de tu Google Sheet): guarda las citas y dice qué horas están ocupadas. Paso a paso en `apps-script/LEEME.md` |
 | `img/` | Fotos: `hero.jpg` (celular), `hero-pc.jpg` (computador), `barbero1.jpg`, `barbero2.jpg`. Ver `img/LEEME.txt` |
 
 ## Links

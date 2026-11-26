@@ -3,6 +3,15 @@
    ========================================================= */
 
 /* ---------------------------------------------------------
+   LINK DE TU GOOGLE SHEET (Apps Script)
+   Pega aquí el link de la "aplicación web", el que termina en /exec.
+   Mientras esté vacío, la página no guarda citas ni bloquea horas:
+   solo abre WhatsApp, como antes. Es la única línea que cambias
+   para conectar o cambiar de hoja.
+   --------------------------------------------------------- */
+const URL_APPS_SCRIPT = "";
+
+/* ---------------------------------------------------------
    CONFIGURACIÓN: cambia aquí nombres, servicios, precios,
    horarios y número de WhatsApp. No hace falta tocar nada más.
    --------------------------------------------------------- */
@@ -12,16 +21,12 @@ const CONFIG = {
   // Número con código de país (57 = Colombia), sin + ni espacios
   whatsapp: "573147986180",
 
-  // Link de tu Google Sheet de citas (la "aplicación web" de Apps Script).
-  // Termina en /exec. Mientras esté vacío, la página no guarda citas
-  // ni bloquea horas: solo abre WhatsApp, como antes.
-  urlHojaCitas: "",
-
   // Mensaje del botón flotante verde
   mensajeFlotante: "Hola Imperial Barber, quiero agendar una cita",
 
   // Barberos: la foto va en la carpeta img con ese nombre (proporción 4:5).
-  // El "id" debe ser igual al de la lista BARBEROS en Código.gs.
+  // El "nombre" debe ser IGUAL al de la pestaña Barberos de tu hoja (si no, el
+  // barbero no aparece). El "id" es el que se usa en el link directo (#barbero1).
   barberos: [
     { id: "barbero1", nombre: "Barbero 1", rol: "Cortes clásicos y fade", foto: "img/barbero1.jpg" },
     { id: "barbero2", nombre: "Barbero 2", rol: "Barba y perfilado", foto: "img/barbero2.jpg" },
@@ -36,7 +41,7 @@ const CONFIG = {
   ],
 
   // Horario: cada hora desde horaInicio hasta horaFin (formato 24 h).
-  // Si lo cambias, cámbialo también en Código.gs.
+  // Si lo cambias, cámbialo también en Code.gs.
   horaInicio: 9,  // 9:00 a. m.
   horaFin: 19,    // 7:00 p. m.
 
@@ -69,7 +74,10 @@ const estado = {
    --------------------------------------------------------- */
 const $ = (sel) => document.querySelector(sel);
 const esCelular = () => matchMedia("(max-width: 899px)").matches;
-const hojaConectada = () => /^https:\/\/script\.google\.com\/.+\/exec$/.test(CONFIG.urlHojaCitas.trim());
+const hojaConectada = () => /^https:\/\/script\.google\.com\/.+\/exec$/.test(URL_APPS_SCRIPT.trim());
+
+// Minúsculas, sin tildes y sin espacios de más (para comparar nombres)
+const normalizar = (t) => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
 
 const formatoPrecio = new Intl.NumberFormat("es-CO", {
   style: "currency", currency: "COP", maximumFractionDigits: 0,
@@ -177,14 +185,14 @@ async function cargarOcupadas() {
   const barbero = estado.barbero;
   const params = new URLSearchParams({
     accion: "ocupadas",
-    barbero: barbero.id,
+    barbero: barbero.nombre,
     desde: claveDia(hoy()),
     hasta: claveDia(ultimoDia()),
   });
 
   $("#hora-hint").textContent = "Cargando horarios disponibles…";
   try {
-    const datos = await pedirJSON(`${CONFIG.urlHojaCitas.trim()}?${params}`, {}, 12);
+    const datos = await pedirJSON(`${URL_APPS_SCRIPT.trim()}?${params}`, {}, 12);
     if (estado.barbero !== barbero) return; // el cliente cambió de barbero mientras cargaba
     if (!datos.ok) throw new Error(datos.error || "respuesta inválida");
     estado.ocupadas = datos.ocupadas || {};
@@ -207,11 +215,41 @@ async function cargarOcupadas() {
 /* ---------------------------------------------------------
    Tarjetas de barberos
    --------------------------------------------------------- */
-function pintarBarberos() {
+// Mensaje dentro de la zona de tarjetas (cargando, sin barberos…)
+function mensajeBarberos(html) {
+  const lista = $("#lista-barberos");
+  lista.innerHTML = "";
+  const p = document.createElement("p");
+  p.className = "barberos__estado";
+  p.setAttribute("role", "status");
+  p.innerHTML = html;
+  lista.appendChild(p);
+}
+
+// Pide a la hoja qué barberos están activos. Si la hoja no responde, se muestran todos.
+async function cargarBarberos() {
+  if (!hojaConectada()) return CONFIG.barberos;
+  try {
+    const datos = await pedirJSON(`${URL_APPS_SCRIPT.trim()}?accion=barberos`, {}, 6);
+    if (!datos.ok || !Array.isArray(datos.barberos)) throw new Error("respuesta inválida");
+    const activos = datos.barberos.map(normalizar);
+    return CONFIG.barberos.filter((b) => activos.includes(normalizar(b.nombre)));
+  } catch (err) {
+    console.warn("No se pudo leer la pestaña Barberos:", err);
+    return CONFIG.barberos;
+  }
+}
+
+function pintarBarberos(barberos) {
   const lista = $("#lista-barberos");
   lista.innerHTML = "";
 
-  CONFIG.barberos.forEach((b) => {
+  if (barberos.length === 0) {
+    mensajeBarberos(`Por ahora no hay barberos disponibles. <a href="${linkWhatsApp(CONFIG.mensajeFlotante)}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>.`);
+    return;
+  }
+
+  barberos.forEach((b) => {
     const tarjeta = document.createElement("button");
     tarjeta.type = "button";
     tarjeta.className = "barbero";
@@ -506,13 +544,11 @@ async function confirmarCita() {
 
   const { barbero, servicio, dia, hora, nombre } = estado;
   const cita = {
-    barbero: barbero.id,
-    barberoNombre: barbero.nombre,
-    dia: claveDia(dia),
+    barbero: barbero.nombre,
+    fecha: claveDia(dia),
     hora,
-    servicio: servicio.nombre,
-    precio: servicio.precio,
     nombre,
+    servicio: servicio.nombre, // solo se usa para el evento de Calendar
   };
 
   ocultarAviso();
@@ -520,7 +556,7 @@ async function confirmarCita() {
   let respuesta = null;
   try {
     // "text/plain" evita un paso extra de permisos (CORS) que Apps Script no soporta
-    respuesta = await pedirJSON(CONFIG.urlHojaCitas.trim(), {
+    respuesta = await pedirJSON(URL_APPS_SCRIPT.trim(), {
       method: "POST",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify(cita),
@@ -534,7 +570,7 @@ async function confirmarCita() {
 
   // 1) Guardada: abre WhatsApp y marca la hora como ocupada
   if (respuesta && respuesta.ok) {
-    const clave = cita.dia;
+    const clave = cita.fecha;
     estado.ocupadas[clave] = [...(estado.ocupadas[clave] || []), hora];
     estado.hora = null;
     abrirWhatsApp(url, ventana);
@@ -549,9 +585,9 @@ async function confirmarCita() {
   // 2) Alguien tomó esa hora primero: no abre WhatsApp
   if (respuesta && respuesta.error === "hora_ocupada") {
     if (ventana) ventana.close();
-    estado.ocupadas[cita.dia] = [...(estado.ocupadas[cita.dia] || []), hora];
+    estado.ocupadas[cita.fecha] = [...(estado.ocupadas[cita.fecha] || []), hora];
     estado.hora = null;
-    mostrarAviso("Esa hora se acaba de reservar. Elige otra, por favor.", "error");
+    mostrarAviso("Esa hora ya no está disponible. Elige otra, por favor.", "error");
     cargarOcupadas(); // trae las horas más recientes
     pintarHoras();
     actualizarResumen();
@@ -594,10 +630,15 @@ $("#cliente-nombre").addEventListener("input", (e) => {
 $("#texto-horario").textContent = CONFIG.textoHorario;
 $("#anio").textContent = new Date().getFullYear();
 
-pintarBarberos();
+async function iniciar() {
+  if (hojaConectada()) mensajeBarberos("Cargando barberos…");
+  const barberos = await cargarBarberos();
+  pintarBarberos(barberos);
 
-// Link directo a un barbero: .../imperial-barber/#barbero1
-// (también acepta el formato anterior #/agenda/barbero1)
-const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
-const barberoInicial = CONFIG.barberos.find((b) => b.id === idInicial);
-if (barberoInicial) abrirAgenda(barberoInicial, true);
+  // Link directo a un barbero: .../imperial-barber/#barbero1
+  // (también acepta el formato anterior #/agenda/barbero1)
+  const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
+  const barberoInicial = barberos.find((b) => b.id === idInicial);
+  if (barberoInicial) abrirAgenda(barberoInicial, true);
+}
+iniciar();
