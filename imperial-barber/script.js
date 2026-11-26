@@ -3,6 +3,15 @@
    ========================================================= */
 
 /* ---------------------------------------------------------
+   LINK DE TU GOOGLE SHEET (Apps Script)
+   Pega aquí el link de la "aplicación web", el que termina en /exec.
+   Mientras esté vacío, la página no guarda citas ni bloquea horas:
+   solo abre WhatsApp, como antes. Es la única línea que cambias
+   para conectar o cambiar de hoja.
+   --------------------------------------------------------- */
+const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwBop-mDfpc8PZ6O9CI7Tl1eV7T4z8oD-j2ePoYYrBbI8HQmCWDyDqhH5dM0pN6wsjX/exec";
+
+/* ---------------------------------------------------------
    CONFIGURACIÓN: cambia aquí nombres, servicios, precios,
    horarios y número de WhatsApp. No hace falta tocar nada más.
    --------------------------------------------------------- */
@@ -15,7 +24,9 @@ const CONFIG = {
   // Mensaje del botón flotante verde
   mensajeFlotante: "Hola Imperial Barber, quiero agendar una cita",
 
-  // Barberos: la foto va en la carpeta img con ese nombre (proporción 4:5)
+  // Barberos: la foto va en la carpeta img con ese nombre (proporción 4:5).
+  // El "nombre" debe ser IGUAL al de la pestaña Barberos de tu hoja (si no, el
+  // barbero no aparece). El "id" es el que se usa en el link directo (#barbero1).
   barberos: [
     { id: "barbero1", nombre: "Barbero 1", rol: "Cortes clásicos y fade", foto: "img/barbero1.jpg" },
     { id: "barbero2", nombre: "Barbero 2", rol: "Barba y perfilado", foto: "img/barbero2.jpg" },
@@ -29,14 +40,15 @@ const CONFIG = {
     { nombre: "Perfilado de cejas", precio: 10000, duracion: 15 },
   ],
 
-  // Horario: cada hora desde horaInicio hasta horaFin (formato 24 h)
+  // Horario: cada hora desde horaInicio hasta horaFin (formato 24 h).
+  // Si lo cambias, cámbialo también en Code.gs.
   horaInicio: 9,  // 9:00 a. m.
   horaFin: 19,    // 7:00 p. m.
 
   // Días cerrados: 0 = domingo, 1 = lunes … 6 = sábado. Ej.: [0] cierra los domingos
   diasCerrados: [],
 
-  // Cuántos meses hacia adelante se puede agendar
+  // Cuántos meses hacia adelante se puede agendar (el mes actual + estos)
   mesesAdelante: 2,
 
   // Texto del pie de página
@@ -47,11 +59,14 @@ const CONFIG = {
    Estado de la reserva
    --------------------------------------------------------- */
 const estado = {
-  barbero: null,   // objeto de CONFIG.barberos
-  servicio: null,  // objeto de CONFIG.servicios
-  dia: null,       // Date (a medianoche)
-  hora: null,      // número 9..19
-  mesVisible: null // Date (día 1 del mes que muestra el calendario)
+  barbero: null,    // objeto de CONFIG.barberos
+  servicio: null,   // objeto de CONFIG.servicios
+  dia: null,        // Date (a medianoche)
+  hora: null,       // número 9..19
+  nombre: "",       // nombre del cliente
+  mesVisible: null, // Date (día 1 del mes que muestra el calendario)
+  ocupadas: {},     // { "2026-11-23": [9, 14], ... } horas ya reservadas del barbero elegido
+  guardando: false, // true mientras se guarda la cita en la hoja
 };
 
 /* ---------------------------------------------------------
@@ -59,6 +74,10 @@ const estado = {
    --------------------------------------------------------- */
 const $ = (sel) => document.querySelector(sel);
 const esCelular = () => matchMedia("(max-width: 899px)").matches;
+const hojaConectada = () => /^https:\/\/script\.google\.com\/.+\/exec$/.test(URL_APPS_SCRIPT.trim());
+
+// Minúsculas, sin tildes y sin espacios de más (para comparar nombres)
+const normalizar = (t) => String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, " ").trim().toLowerCase();
 
 const formatoPrecio = new Intl.NumberFormat("es-CO", {
   style: "currency", currency: "COP", maximumFractionDigits: 0,
@@ -77,15 +96,41 @@ function textoDia(fecha) {
   return fecha.toLocaleDateString("es-CO", { weekday: "long", day: "numeric", month: "long" });
 }
 
+// Date -> "2026-11-23" (así se guarda el día en la hoja)
+function claveDia(fecha) {
+  const m = String(fecha.getMonth() + 1).padStart(2, "0");
+  const d = String(fecha.getDate()).padStart(2, "0");
+  return `${fecha.getFullYear()}-${m}-${d}`;
+}
+
 function hoy() {
   const d = new Date();
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
+// Último día que se puede agendar
+function ultimoDia() {
+  const h = hoy();
+  return new Date(h.getFullYear(), h.getMonth() + CONFIG.mesesAdelante + 1, 0);
+}
+
 const mismoDia = (a, b) => a && b && a.getTime() === b.getTime();
 
 const linkWhatsApp = (texto) => `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(texto)}`;
+
+// fetch con límite de tiempo, para no dejar al cliente esperando si la hoja no responde
+async function pedirJSON(url, opciones = {}, segundos = 15) {
+  const control = new AbortController();
+  const reloj = setTimeout(() => control.abort(), segundos * 1000);
+  try {
+    const resp = await fetch(url, { ...opciones, signal: control.signal, redirect: "follow" });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json();
+  } finally {
+    clearTimeout(reloj);
+  }
+}
 
 // Pone la foto dentro de un recuadro; si la foto no existe, se queda el recuadro gris con el texto
 function ponerFoto(contenedor, src, etiqueta, alt = "") {
@@ -107,14 +152,104 @@ function irA(selector, espera = 180) {
   setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), espera);
 }
 
+// Convierte texto en HTML seguro (para mostrar mensajes que vienen de la hoja)
+function escaparHTML(texto) {
+  const div = document.createElement("div");
+  div.textContent = String(texto);
+  return div.innerHTML;
+}
+
+// Muestra un aviso arriba del botón de confirmar (tipo: "ok" o "error")
+function mostrarAviso(html, tipo = "ok") {
+  const aviso = $("#aviso");
+  aviso.innerHTML = html;
+  aviso.classList.toggle("es-error", tipo === "error");
+  aviso.hidden = false;
+  $(".confirmar").classList.add("con-aviso");
+}
+function ocultarAviso() {
+  $("#aviso").hidden = true;
+  $(".confirmar").classList.remove("con-aviso");
+}
+
+/* ---------------------------------------------------------
+   Horas ocupadas (vienen de la Google Sheet)
+   --------------------------------------------------------- */
+function horasOcupadasDe(fecha) {
+  return estado.ocupadas[claveDia(fecha)] || [];
+}
+
+// Pide a la hoja las horas ya reservadas del barbero, desde hoy hasta el último día permitido
+async function cargarOcupadas() {
+  if (!hojaConectada() || !estado.barbero) return;
+  const barbero = estado.barbero;
+  const params = new URLSearchParams({
+    accion: "ocupadas",
+    barbero: barbero.nombre,
+    desde: claveDia(hoy()),
+    hasta: claveDia(ultimoDia()),
+  });
+
+  $("#hora-hint").textContent = "Cargando horarios disponibles…";
+  try {
+    const datos = await pedirJSON(`${URL_APPS_SCRIPT.trim()}?${params}`, {}, 12);
+    if (estado.barbero !== barbero) return; // el cliente cambió de barbero mientras cargaba
+    if (!datos.ok) throw new Error(datos.error || "respuesta inválida");
+    estado.ocupadas = datos.ocupadas || {};
+  } catch (err) {
+    // Si la hoja no responde, la página sigue funcionando y tú confirmas por WhatsApp
+    console.warn("No se pudieron cargar las horas ocupadas:", err);
+  } finally {
+    $("#hora-hint").textContent = "Primero elige un día.";
+  }
+
+  // Si la hora que el cliente tenía elegida ya está ocupada, se borra
+  if (estado.dia && estado.hora !== null && horasOcupadasDe(estado.dia).includes(estado.hora)) {
+    estado.hora = null;
+  }
+  pintarCalendario();
+  pintarHoras();
+  actualizarResumen();
+}
+
 /* ---------------------------------------------------------
    Tarjetas de barberos
    --------------------------------------------------------- */
-function pintarBarberos() {
+// Mensaje dentro de la zona de tarjetas (cargando, sin barberos…)
+function mensajeBarberos(html) {
+  const lista = $("#lista-barberos");
+  lista.innerHTML = "";
+  const p = document.createElement("p");
+  p.className = "barberos__estado";
+  p.setAttribute("role", "status");
+  p.innerHTML = html;
+  lista.appendChild(p);
+}
+
+// Pide a la hoja qué barberos están activos. Si la hoja no responde, se muestran todos.
+async function cargarBarberos() {
+  if (!hojaConectada()) return CONFIG.barberos;
+  try {
+    const datos = await pedirJSON(`${URL_APPS_SCRIPT.trim()}?accion=barberos`, {}, 6);
+    if (!datos.ok || !Array.isArray(datos.barberos)) throw new Error("respuesta inválida");
+    const activos = datos.barberos.map(normalizar);
+    return CONFIG.barberos.filter((b) => activos.includes(normalizar(b.nombre)));
+  } catch (err) {
+    console.warn("No se pudo leer la pestaña Barberos:", err);
+    return CONFIG.barberos;
+  }
+}
+
+function pintarBarberos(barberos) {
   const lista = $("#lista-barberos");
   lista.innerHTML = "";
 
-  CONFIG.barberos.forEach((b) => {
+  if (barberos.length === 0) {
+    mensajeBarberos(`Por ahora no hay barberos disponibles. <a href="${linkWhatsApp(CONFIG.mensajeFlotante)}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>.`);
+    return;
+  }
+
+  barberos.forEach((b) => {
     const tarjeta = document.createElement("button");
     tarjeta.type = "button";
     tarjeta.className = "barbero";
@@ -144,13 +279,15 @@ function pintarBarberos() {
    Agenda (aparece debajo al elegir barbero, sin recargar)
    --------------------------------------------------------- */
 function abrirAgenda(barbero, desplazar) {
-  // Si cambia de barbero, empieza la reserva de cero
+  // Si cambia de barbero, empieza la reserva de cero (el nombre se conserva)
   if (estado.barbero !== barbero) {
     estado.barbero = barbero;
     estado.servicio = null;
     estado.dia = null;
     estado.hora = null;
     estado.mesVisible = null;
+    estado.ocupadas = {};
+    ocultarAviso();
   }
   if (!estado.mesVisible) {
     const h = hoy();
@@ -177,6 +314,8 @@ function abrirAgenda(barbero, desplazar) {
     irA("#agenda", 60);
     setTimeout(() => $("#perfil-nombre").focus({ preventScroll: true }), 700);
   }
+
+  cargarOcupadas();
 }
 
 /* --- Servicios --- */
@@ -214,7 +353,7 @@ function pintarCalendario() {
   const contenedor = $("#cal-dias");
   const mes = estado.mesVisible;
   const h = hoy();
-  const limite = new Date(h.getFullYear(), h.getMonth() + CONFIG.mesesAdelante + 1, 0); // último día permitido
+  const limite = ultimoDia();
 
   const nombreMes = mes.toLocaleDateString("es-CO", { month: "long" });
   $("#cal-mes").textContent = `${nombreMes.charAt(0).toUpperCase()}${nombreMes.slice(1)} ${mes.getFullYear()}`;
@@ -234,12 +373,14 @@ function pintarCalendario() {
     btn.type = "button";
     btn.className = "dia";
     btn.textContent = d;
-    btn.setAttribute("aria-label", textoDia(fecha));
     btn.setAttribute("aria-pressed", String(mismoDia(fecha, estado.dia)));
 
     const cerrado = CONFIG.diasCerrados.includes(fecha.getDay());
-    const sinHoras = mismoDia(fecha, h) && horasLibres(fecha).length === 0;
-    btn.disabled = fecha < h || fecha > limite || cerrado || sinHoras;
+    const fueraDeRango = fecha < h || fecha > limite;
+    // Día lleno: ya pasaron todas sus horas (hoy) o están todas reservadas
+    const lleno = !fueraDeRango && !cerrado && horasLibres(fecha).length === 0;
+    btn.disabled = fueraDeRango || cerrado || lleno;
+    btn.setAttribute("aria-label", textoDia(fecha) + (lleno ? ", sin horas libres" : ""));
     if (mismoDia(fecha, h)) btn.classList.add("es-hoy");
 
     btn.addEventListener("click", () => {
@@ -247,11 +388,18 @@ function pintarCalendario() {
       // Si la hora elegida ya no está libre ese día, se borra
       if (estado.hora !== null && !horasLibres(fecha).includes(estado.hora)) estado.hora = null;
       contenedor.querySelectorAll(".dia").forEach((el) => el.setAttribute("aria-pressed", String(el === btn)));
+      ocultarAviso();
       pintarHoras();
       actualizarResumen();
       if (estado.hora === null && esCelular()) irA("#paso-hora");
     });
     contenedor.appendChild(btn);
+  }
+
+  // Si el día elegido quedó sin horas (por ejemplo, se acaban de reservar), se borra
+  if (estado.dia && horasLibres(estado.dia).length === 0) {
+    estado.dia = null;
+    estado.hora = null;
   }
 }
 
@@ -262,14 +410,15 @@ function cambiarMes(delta) {
 }
 
 /* --- Horas --- */
-// Horas libres de un día (hoy no muestra las horas que ya pasaron)
+// Horas libres de un día: no han pasado y nadie las reservó
 function horasLibres(fecha) {
   const ahora = new Date();
+  const ocupadas = horasOcupadasDe(fecha);
   const horas = [];
   for (let hh = CONFIG.horaInicio; hh <= CONFIG.horaFin; hh++) {
     const momento = new Date(fecha);
     momento.setHours(hh, 0, 0, 0);
-    if (momento > ahora) horas.push(hh);
+    if (momento > ahora && !ocupadas.includes(hh)) horas.push(hh);
   }
   return horas;
 }
@@ -282,21 +431,33 @@ function pintarHoras() {
   if (!estado.dia) { hint.hidden = false; return; }
   hint.hidden = true;
 
-  const libres = horasLibres(estado.dia);
+  const ahora = new Date();
+  const ocupadas = horasOcupadasDe(estado.dia);
   for (let hh = CONFIG.horaInicio; hh <= CONFIG.horaFin; hh++) {
+    const momento = new Date(estado.dia);
+    momento.setHours(hh, 0, 0, 0);
+    const yaPaso = momento <= ahora;
+    const ocupada = ocupadas.includes(hh);
+
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "hora";
     btn.textContent = textoHora(hh);
     btn.setAttribute("role", "radio");
     btn.setAttribute("aria-checked", String(estado.hora === hh));
-    btn.disabled = !libres.includes(hh);
+    btn.disabled = yaPaso || ocupada;
+    if (ocupada) {
+      btn.classList.add("es-ocupada");
+      btn.title = "Ya reservada";
+      btn.setAttribute("aria-label", `${textoHora(hh)}, ya reservada`);
+    }
 
     btn.addEventListener("click", () => {
       estado.hora = hh;
       lista.querySelectorAll(".hora").forEach((el) => el.setAttribute("aria-checked", String(el === btn)));
+      ocultarAviso();
       actualizarResumen();
-      if (esCelular()) irA("#resumen");
+      if (esCelular()) irA(estado.nombre.length < 2 ? "#paso-nombre" : "#resumen");
     });
     lista.appendChild(btn);
   }
@@ -304,29 +465,32 @@ function pintarHoras() {
 
 /* --- Resumen y confirmación --- */
 function actualizarResumen() {
-  const { barbero, servicio, dia, hora } = estado;
+  const { barbero, servicio, dia, hora, nombre } = estado;
   $("#res-barbero").textContent = barbero ? barbero.nombre : "—";
   $("#res-servicio").textContent = servicio ? servicio.nombre : "—";
   $("#res-dia").textContent = dia ? textoDia(dia) : "—";
   $("#res-hora").textContent = hora !== null ? textoHora(hora) : "—";
+  $("#res-nombre").textContent = nombre || "—";
   $("#res-total").textContent = servicio ? precio(servicio.precio) : "—";
 
   const faltan = [];
   if (!servicio) faltan.push("servicio");
   if (!dia) faltan.push("día");
   if (hora === null) faltan.push("hora");
+  if (nombre.length < 2) faltan.push("tu nombre");
 
   const listo = faltan.length === 0;
-  $("#btn-confirmar").disabled = !listo;
+  $("#btn-confirmar").disabled = !listo || estado.guardando;
   $(".confirmar").classList.toggle("listo", listo);
-  if (!listo) $("#confirmar-hint").textContent = `Falta elegir: ${faltan.join(", ")}`;
+  if (!listo) $("#confirmar-hint").textContent = `Falta: ${faltan.join(", ")}`;
 }
 
 function mensajeReserva() {
-  const { barbero, servicio, dia, hora } = estado;
+  const { barbero, servicio, dia, hora, nombre } = estado;
   return [
     `Hola ${CONFIG.negocio}, quiero agendar una cita:`,
     ``,
+    `• Nombre: ${nombre}`,
     `• Barbero: ${barbero.nombre}`,
     `• Servicio: ${servicio.nombre} (${precio(servicio.precio)})`,
     `• Día: ${textoDia(dia)}`,
@@ -336,17 +500,115 @@ function mensajeReserva() {
   ].join("\n");
 }
 
-function confirmarCita() {
+// Abre WhatsApp. "ventana" es una pestaña abierta antes de guardar (para que el
+// navegador no la bloquee); si no existe, abre en la misma pestaña.
+function abrirWhatsApp(url, ventana) {
+  if (ventana && !ventana.closed) {
+    ventana.location.href = url;
+  } else {
+    const nueva = window.open(url, "_blank");
+    if (nueva) nueva.opener = null;
+    else location.href = url;
+  }
+}
+
+function ponerCargando(si) {
+  estado.guardando = si;
+  $("#btn-confirmar").classList.toggle("cargando", si);
+  $("#btn-confirmar-txt").textContent = si ? "Guardando tu cita…" : "Confirmar cita";
+  actualizarResumen();
+}
+
+async function confirmarCita() {
   if ($("#btn-confirmar").disabled) return;
   const url = linkWhatsApp(mensajeReserva());
-  // Abre WhatsApp (app en el celular, WhatsApp Web en el computador)
-  const ventana = window.open(url, "_blank");
-  if (ventana) ventana.opener = null;
-  else location.href = url; // si el navegador bloquea la ventana nueva, abre en la misma
+
+  // Sin hoja conectada: solo abre WhatsApp, como antes
+  if (!hojaConectada()) {
+    abrirWhatsApp(url, null);
+    return;
+  }
+
+  // Se abre la pestaña ya, en el mismo toque, para que el navegador no la bloquee.
+  // Se llena con WhatsApp cuando la cita quede guardada.
+  let ventana = null;
+  try {
+    ventana = window.open("", "_blank");
+    if (ventana) {
+      ventana.opener = null;
+      ventana.document.title = "Abriendo WhatsApp…";
+      ventana.document.body.style.cssText = "font:16px system-ui,sans-serif;background:#0B0B0C;color:#F3EEE6;display:grid;place-items:center;height:100vh;margin:0";
+      ventana.document.body.textContent = "Guardando tu cita y abriendo WhatsApp…";
+    }
+  } catch { ventana = null; }
+
+  const { barbero, servicio, dia, hora, nombre } = estado;
+  const cita = {
+    barbero: barbero.nombre,
+    fecha: claveDia(dia),
+    hora,
+    nombre,
+    servicio: servicio.nombre, // solo se usa para el evento de Calendar
+  };
+
+  ocultarAviso();
+  ponerCargando(true);
+  let respuesta = null;
+  try {
+    // "text/plain" evita un paso extra de permisos (CORS) que Apps Script no soporta
+    respuesta = await pedirJSON(URL_APPS_SCRIPT.trim(), {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(cita),
+    }, 20);
+  } catch (err) {
+    respuesta = null; // la hoja no respondió
+    console.warn("No se pudo guardar la cita en la hoja:", err);
+  } finally {
+    ponerCargando(false);
+  }
+
+  // 1) Guardada: abre WhatsApp y marca la hora como ocupada
+  if (respuesta && respuesta.ok) {
+    const clave = cita.fecha;
+    estado.ocupadas[clave] = [...(estado.ocupadas[clave] || []), hora];
+    estado.hora = null;
+    abrirWhatsApp(url, ventana);
+    pintarCalendario();
+    pintarHoras();
+    actualizarResumen();
+    mostrarAviso(`Listo, tu cita del ${textoDia(dia)} a las ${textoHora(hora)} quedó guardada. ` +
+      `Envía el mensaje de WhatsApp para confirmarla. <a href="${url}" target="_blank" rel="noopener">¿No se abrió WhatsApp? Toca aquí</a>`);
+    return;
+  }
+
+  // 2) Alguien tomó esa hora primero: no abre WhatsApp
+  if (respuesta && respuesta.error === "hora_ocupada") {
+    if (ventana) ventana.close();
+    estado.ocupadas[cita.fecha] = [...(estado.ocupadas[cita.fecha] || []), hora];
+    estado.hora = null;
+    mostrarAviso("Esa hora ya no está disponible. Elige otra, por favor.", "error");
+    cargarOcupadas(); // trae las horas más recientes
+    pintarHoras();
+    actualizarResumen();
+    if (esCelular()) irA("#paso-hora");
+    return;
+  }
+
+  // 3) La hoja rechazó los datos (por ejemplo, un día que ya pasó)
+  if (respuesta && respuesta.error) {
+    if (ventana) ventana.close();
+    mostrarAviso(`No pudimos guardar tu cita: ${escaparHTML(respuesta.mensaje || "revisa los datos e intenta de nuevo")}.`, "error");
+    return;
+  }
+
+  // 4) La hoja no respondió: igual abre WhatsApp para no perder al cliente
+  abrirWhatsApp(url, ventana);
+  mostrarAviso("No pudimos guardar la cita automáticamente, pero te abrimos WhatsApp para confirmarla con la barbería.", "error");
 }
 
 /* ---------------------------------------------------------
-   Limpieza: la versión anterior se podía instalar como app.
+   Limpieza: una versión anterior se podía instalar como app.
    Esto la desinstala en los celulares que alcanzaron a abrirla.
    --------------------------------------------------------- */
 if ("serviceWorker" in navigator) {
@@ -361,13 +623,22 @@ $("#fab-whatsapp").href = linkWhatsApp(CONFIG.mensajeFlotante);
 $("#cal-prev").addEventListener("click", () => cambiarMes(-1));
 $("#cal-next").addEventListener("click", () => cambiarMes(1));
 $("#btn-confirmar").addEventListener("click", confirmarCita);
+$("#cliente-nombre").addEventListener("input", (e) => {
+  estado.nombre = e.target.value.replace(/\s+/g, " ").trim();
+  actualizarResumen();
+});
 $("#texto-horario").textContent = CONFIG.textoHorario;
 $("#anio").textContent = new Date().getFullYear();
 
-pintarBarberos();
+async function iniciar() {
+  if (hojaConectada()) mensajeBarberos("Cargando barberos…");
+  const barberos = await cargarBarberos();
+  pintarBarberos(barberos);
 
-// Link directo a un barbero: .../imperial-barber/#barbero1
-// (también acepta el formato anterior #/agenda/barbero1)
-const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
-const barberoInicial = CONFIG.barberos.find((b) => b.id === idInicial);
-if (barberoInicial) abrirAgenda(barberoInicial, true);
+  // Link directo a un barbero: .../imperial-barber/#barbero1
+  // (también acepta el formato anterior #/agenda/barbero1)
+  const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
+  const barberoInicial = barberos.find((b) => b.id === idInicial);
+  if (barberoInicial) abrirAgenda(barberoInicial, true);
+}
+iniciar();

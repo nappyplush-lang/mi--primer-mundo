@@ -636,3 +636,51 @@ h1, h2, h3, p { margin: 0; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
 }
+
+/* =========================================================
+   RESERVAS GUARDADAS EN GOOGLE SHEETS
+   ========================================================= */
+
+/* --- Campo de nombre --- */
+.campo {
+  width: 100%;
+  height: 54px;
+  padding: 0 16px;
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--linea-crema);
+  background: var(--crema-2);
+  color: var(--texto-oscuro);
+  font: inherit;
+  font-size: 16px; /* 16px evita que el iPhone haga zoom al escribir */
+  transition: border-color .2s, box-shadow .2s;
+}
+.campo::placeholder { color: #A39A8C; }
+.campo:focus { outline: none; border-color: var(--texto-oscuro); box-shadow: 0 0 0 3px rgba(200,169,126,.35); }
+.paso__title label { cursor: pointer; }
+
+/* --- Horas ocupadas (ya reservadas por otro cliente) --- */
+.hora.es-ocupada { color: #B5AB9C; background: #ECE5DA; border-color: #ECE5DA; text-decoration: line-through; }
+
+/* --- Avisos --- */
+.aviso {
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radio-sm);
+  font-size: 14px;
+  line-height: 1.4;
+  background: #E9F4EC;
+  color: #1E5631;
+  border: 1px solid #C6E3CF;
+}
+.aviso.es-error { background: #FBEAE7; color: #8A2A1B; border-color: #F1CBC4; }
+.aviso a { font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* --- Botón mientras guarda --- */
+.btn-confirmar.cargando { background: var(--texto-oscuro); color: var(--crema); cursor: progress; }
+.btn-confirmar.cargando svg { animation: latido 1s ease-in-out infinite; }
+@keyframes latido { 50% { opacity: .35; } }
+.confirmar.con-aviso .confirmar__hint { display: none; }
+
+/* --- Mensaje en la zona de barberos (cargando, sin barberos) --- */
+.barberos__estado { grid-column: 1 / -1; padding: 24px 0; color: var(--gris-claro); font-size: 15px; }
+.barberos__estado a { color: var(--dorado); text-decoration: underline; text-underline-offset: 3px; }
