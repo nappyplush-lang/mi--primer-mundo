@@ -2,7 +2,7 @@
    IMPERIAL BARBER · Sistema de citas con Google Sheets
    (Google Apps Script, va pegado en tu hoja de cálculo)
 
-   La hoja tiene 3 pestañas (se crean solas al ejecutar "configurar"):
+   La hoja tiene 4 pestañas (se crean solas al ejecutar "configurar"):
 
    - Barberos   Nombre | Activo (SÍ o NO) | Correo
                 Un barbero en NO desaparece de la página.
@@ -12,8 +12,12 @@
                 Las llena la página. Para cancelar una cita, borra su fila:
                 esa hora vuelve a quedar libre.
    - Descansos  Barbero | Fecha | Hora
-                Horas en las que un barbero no atiende (almuerzo, trámite,
-                día libre). Hora vacía = todo el día. Aparecen bloqueadas.
+                Horas en las que un barbero no atiende UNA VEZ (trámite, día
+                libre). Hora vacía = todo el día. Aparecen bloqueadas.
+   - Horario fijo  Barbero | Día | Hora
+                Lo que se REPITE cada semana: "Alex | miércoles | (vacío)" = Alex no
+                atiende ningún miércoles. "Dayana | Todos los días | 1:00 p. m." = su
+                almuerzo diario. Hora vacía = todo el día.
 
    Si cambias algo de este código, publica una versión nueva:
    Implementar > Gestionar implementaciones > (lápiz) > Versión: Nueva versión > Implementar.
@@ -36,7 +40,7 @@ const ZONA = "America/Bogota";
 
 // Barberos que se escriben solos en la pestaña "Barberos" la primera vez.
 // Los nombres deben ser IGUALES a los de CONFIG.barberos en script.js.
-const BARBEROS_INICIALES = ["Barbero 1", "Barbero 2"];
+const BARBEROS_INICIALES = ["Alex", "Dayana"];
 
 // OPCIONAL: Google Calendar. Si pones aquí el ID de un calendario, cada cita
 // nueva crea también un evento ahí (lo ves en tu celular, con alarma).
@@ -62,6 +66,7 @@ const NOMBRE_NEGOCIO = "Imperial Barber";
 const HOJA_BARBEROS = "Barberos";
 const HOJA_CITAS = "Citas";
 const HOJA_DESCANSOS = "Descansos";
+const HOJA_FIJO = "Horario fijo";
 
 /* =========================================================
    1. LA PÁGINA PREGUNTA
@@ -279,6 +284,28 @@ function ocupadasDe(nombreBarbero, desde, hasta) {
     }
   });
 
+  // Horario fijo: Barbero | Día de la semana | Hora (hora vacía = todo el día)
+  const fijas = filas(hojas().fijo, 3)
+    .filter(function (f) { return norm(f[0]) === clave; })
+    .map(function (f) { return { dias: diasDeLaSemana(f[1]), hora: esVacio(f[2]) ? null : horaDe(f[2]) }; })
+    .filter(function (r) { return r.dias.length > 0; });
+  if (fijas.length > 0) {
+    // Se recorre cada día del rango (con un tope, por si piden un rango enorme)
+    const tope = sumarDias(desde, 400);
+    const fin = hasta < tope ? hasta : tope;
+    for (let dia = desde; dia <= fin; dia = sumarDias(dia, 1)) {
+      const semana = diaSemanaDe(dia);
+      fijas.forEach(function (r) {
+        if (r.dias.indexOf(semana) === -1) return;
+        if (r.hora === null) {
+          for (let h = HORA_INICIO; h <= HORA_FIN; h++) poner(dia, h);
+        } else {
+          poner(dia, r.hora);
+        }
+      });
+    }
+  }
+
   Object.keys(mapa).forEach(function (d) { mapa[d].sort(function (a, b) { return a - b; }); });
   return mapa;
 }
@@ -304,9 +331,12 @@ function asegurarHojas() {
   let barberos = libro.getSheetByName(HOJA_BARBEROS);
   let citas = libro.getSheetByName(HOJA_CITAS);
   let descansos = libro.getSheetByName(HOJA_DESCANSOS);
+  let fijo = libro.getSheetByName(HOJA_FIJO);
   comprobarCitas(citas);
   completarBarberos(barberos);
-  if (barberos && citas && descansos) return { libro: libro, barberos: barberos, citas: citas, descansos: descansos };
+  if (barberos && citas && descansos && fijo) {
+    return { libro: libro, barberos: barberos, citas: citas, descansos: descansos, fijo: fijo };
+  }
 
   // Misma zona horaria en toda la hoja, para que las fechas no se corran un día
   libro.setSpreadsheetTimeZone(ZONA);
@@ -328,7 +358,11 @@ function asegurarHojas() {
     descansos = libro.insertSheet(HOJA_DESCANSOS, libro.getSheets().length);
     prepararDescansos(libro, descansos);
   }
-  return { libro: libro, barberos: barberos, citas: citas, descansos: descansos };
+  if (!fijo) {
+    fijo = libro.insertSheet(HOJA_FIJO, libro.getSheets().length);
+    prepararFijo(libro, fijo);
+  }
+  return { libro: libro, barberos: barberos, citas: citas, descansos: descansos, fijo: fijo };
 }
 
 // Si la pestaña "Citas" viene de una versión anterior del código, sus columnas son otras
@@ -397,6 +431,26 @@ function prepararDescansos(libro, hoja) {
   hoja.getRange("C1").setNote("Déjala vacía para bloquear TODO el día de ese barbero.");
   hoja.setColumnWidth(1, 200);
   hoja.setColumnWidth(2, 120);
+  hoja.setColumnWidth(3, 120);
+}
+
+function prepararFijo(libro, hoja) {
+  titulos(hoja, ["Barbero", "Día", "Hora"]);
+  hoja.getRange("C:C").setNumberFormat("@");
+  hoja.getRange("A2:A").setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInRange(libro.getRange("Barberos!A2:A"), true).setAllowInvalid(false).build());
+  hoja.getRange("B2:B").setDataValidation(
+    SpreadsheetApp.newDataValidation()
+      .requireValueInList(["Todos los días", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"], true)
+      .setAllowInvalid(false).build());
+  const horas = [];
+  for (let h = HORA_INICIO; h <= HORA_FIN; h++) horas.push(etiquetaHora(h));
+  hoja.getRange("C2:C").setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(horas, true).setAllowInvalid(false).build());
+  hoja.getRange("A1").setNote("Lo que se repite cada semana. Ejemplos: Alex | miércoles | (vacío) = Alex no atiende los miércoles. Dayana | Todos los días | 1:00 p. m. = su almuerzo.");
+  hoja.getRange("C1").setNote("Déjala vacía para bloquear TODO el día.");
+  hoja.setColumnWidth(1, 200);
+  hoja.setColumnWidth(2, 160);
   hoja.setColumnWidth(3, 120);
 }
 
@@ -501,6 +555,24 @@ function horaDe(v) {
   return h >= 0 && h <= 23 ? h : null;
 }
 
+// Día de la semana de un día "2026-12-02": 0 = domingo … 6 = sábado
+function diaSemanaDe(diaTexto) {
+  const p = diaTexto.split("-").map(Number);
+  return new Date(Date.UTC(p[0], p[1] - 1, p[2])).getUTCDay();
+}
+
+// Entiende "miércoles", "los martes", "Todos los días"… y devuelve los días (0 a 6)
+function diasDeLaSemana(texto) {
+  const t = norm(texto);
+  if (!t) return [];
+  const nombres = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
+  const dias = [];
+  nombres.forEach(function (n, i) { if (t.indexOf(n) !== -1) dias.push(i); });
+  if (dias.length > 0) return dias;
+  if (/todos|diari|cada dia|siempre/.test(t)) return [0, 1, 2, 3, 4, 5, 6];
+  return [];
+}
+
 function hoyTexto() {
   return Utilities.formatDate(new Date(), ZONA, "yyyy-MM-dd");
 }
@@ -521,5 +593,5 @@ function sumarDias(diaTexto, dias) {
    ========================================================= */
 function configurar() {
   asegurarHojas();
-  console.log("Listo: las pestañas Barberos, Citas y Descansos están creadas. Ahora publica el código como aplicación web.");
+  console.log("Listo: las pestañas Barberos, Citas, Descansos y Horario fijo están creadas. Ahora publica el código como aplicación web.");
 }

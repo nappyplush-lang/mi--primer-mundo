@@ -18,13 +18,14 @@ días en los que un barbero no atiende. Es gratis y no instalas nada.
 
 ## Cómo queda tu hoja
 
-Tendrá 3 pestañas. Las crea el código solo, tú no las armas a mano.
+Tendrá 4 pestañas. Las crea el código solo, tú no las armas a mano.
 
 | Pestaña | Para qué sirve | Columnas |
 |---|---|---|
 | **Barberos** | Quién aparece en la página y a quién se avisa | Nombre · Activo (SÍ o NO) · Correo |
 | **Citas** | Las reservas. Las llena la página | Fecha · Hora · Barbero · Cliente · Creada en |
-| **Descansos** | Horas o días en que un barbero no atiende | Barbero · Fecha · Hora |
+| **Descansos** | Horas o días en que un barbero no atiende **una sola vez** | Barbero · Fecha · Hora |
+| **Horario fijo** | Lo que **se repite cada semana**: días libres y almuerzos | Barbero · Día · Hora |
 
 ---
 
@@ -183,6 +184,26 @@ Escribe una fila por cada bloqueo:
 
 ---
 
+### Lo que se repite cada semana: pestaña Horario fijo
+
+Para días libres y almuerzos que no cambian, no escribas fechas una por una: usa
+**Horario fijo**. Escribe una fila por cada regla:
+
+| Barbero | Día | Hora | Qué pasa |
+|---|---|---|---|
+| Alex | miércoles | *(vacía)* | Alex no atiende **ningún miércoles** |
+| Dayana | martes | *(vacía)* | Dayana no atiende **ningún martes** |
+| Alex | Todos los días | 2:00 p. m. | Su **almuerzo**: esa hora siempre sale tachada |
+| Dayana | Todos los días | 1:00 p. m. | Su **almuerzo** |
+
+- **Barbero, Día y Hora:** escoge de la lista desplegable.
+- **Hora vacía = todo el día** de ese barbero.
+- Para desactivar una regla, **borra su fila**.
+- Un día libre **solo por una vez** (un trámite, una fecha especial) va en **Descansos**.
+- Los cambios se ven al **recargar la página**.
+
+---
+
 ## Que al barbero le suene el celular cuando le agendan
 
 Cada cita nueva puede avisar **al barbero de esa cita**, de dos formas que funcionan juntas:
@@ -239,6 +260,16 @@ Por defecto el evento va a tu calendario principal. Si prefieres uno aparte para
 
 Si algo falla (un correo mal escrito, un permiso sin dar), la **cita igual queda
 guardada** en la hoja. Solo no se envía el aviso.
+
+---
+
+## Si ya tenías la hoja armada y llega una versión nueva del código
+
+1. Pega el código nuevo (clic en el código, **Ctrl + A**, **Supr**, pegar, **Ctrl + S**).
+2. **Vuelve a escribir tu correo** entre las comillas de `ID_CALENDARIO`, porque al pegar se borra.
+3. Elige `configurar` y pulsa **Ejecutar**. Aparecen solas las pestañas o columnas nuevas (por ejemplo **Horario fijo**), sin tocar tus datos.
+4. **Publica una versión nueva** (ver abajo).
+5. Cambia en la hoja los nombres de los barberos, si cambiaron. Deben ser **iguales** a los de la página.
 
 ---
 
