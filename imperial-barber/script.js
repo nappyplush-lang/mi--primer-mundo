@@ -26,18 +26,56 @@ const CONFIG = {
 
   // Barberos: la foto va en la carpeta img con ese nombre (proporción 4:5).
   // El "nombre" debe ser IGUAL al de la pestaña Barberos de tu hoja (si no, el
-  // barbero no aparece). El "id" es el que se usa en el link directo (#barbero1).
+  // barbero no aparece). El "id" es el que se usa en el link directo (#alex).
+  // "rol" es una frase corta bajo el nombre (puede ir vacía).
   barberos: [
-    { id: "barbero1", nombre: "Barbero 1", rol: "Cortes clásicos y fade", foto: "img/barbero1.jpg" },
-    { id: "barbero2", nombre: "Barbero 2", rol: "Barba y perfilado", foto: "img/barbero2.jpg" },
+    { id: "alex", nombre: "Alex", rol: "", foto: "img/alex.jpg" },
+    { id: "dayana", nombre: "Dayana", rol: "", foto: "img/dayana.jpg" },
   ],
 
-  // Servicios: precio en pesos colombianos (sin puntos) y duración en minutos
+  // Pestañas de servicios, en el orden en que se muestran
+  categorias: ["Cortes y paquetes", "Individuales", "Mujeres"],
+
+  // Servicios: precio en pesos colombianos (sin puntos). Con precio 0 se muestra
+  // "Consultar" (o el texto de "precioTexto" si lo pones). "categoria" debe ser una
+  // de las de arriba. Todos los servicios llevan una mascarilla a elección.
   servicios: [
-    { nombre: "Corte de cabello", precio: 25000, duracion: 45 },
-    { nombre: "Arreglo de barba", precio: 18000, duracion: 30 },
-    { nombre: "Corte + barba", precio: 38000, duracion: 75 },
-    { nombre: "Perfilado de cejas", precio: 10000, duracion: 15 },
+    // --- Cortes y paquetes ---
+    { categoria: "Cortes y paquetes", nombre: "Corte básico", precio: 30000,
+      descripcion: "Corte, asesoría de imagen y mascarilla a elección (parche de orejas o limpieza facial)" },
+    { categoria: "Cortes y paquetes", nombre: "Corte y barba", precio: 40000,
+      descripcion: "Corte, barba y mascarilla a elección" },
+    { categoria: "Cortes y paquetes", nombre: "Corte, barba y cejas", precio: 45000,
+      descripcion: "Corte, barba, cejas y mascarilla a elección" },
+    { categoria: "Cortes y paquetes", nombre: "Paquete Platino", precio: 40000,
+      descripcion: "Corte, mascarilla a elección y limpieza de puntos negros" },
+    { categoria: "Cortes y paquetes", nombre: "Paquete Gold", precio: 50000,
+      descripcion: "Corte, mascarilla a elección, puntos negros y exfoliación" },
+    { categoria: "Cortes y paquetes", nombre: "VIP", precio: 65000,
+      descripcion: "Todo el Gold más velo facial y gafas de proyectoterapia" },
+
+    // --- Individuales ---
+    { categoria: "Individuales", nombre: "Cejas", precio: 8000 },
+    { categoria: "Individuales", nombre: "Barba sola", precio: 15000 },
+    { categoria: "Individuales", nombre: "Marcada de contorno", precio: 12000 },
+    { categoria: "Individuales", nombre: "Cera de oídos y nariz", precio: 10000 },
+    { categoria: "Individuales", nombre: "Estructura de tijera", precio: 20000,
+      descripcion: "Estructura de tijera al cabello, parte del corte" },
+    { categoria: "Individuales", nombre: "Color base de barba", precio: 30000 },
+    { categoria: "Individuales", nombre: "Color base global", precio: 70000 },
+    { categoria: "Individuales", nombre: "Mechas", precio: 0, precioTexto: "Según valoración" },
+    { categoria: "Individuales", nombre: "Paquete completo", precio: 45000,
+      descripcion: "Todos los tratamientos incluidos" },
+    { categoria: "Individuales", nombre: "Mascarilla", precio: 15000,
+      descripcion: "Una mascarilla a elección" },
+
+    // --- Mujeres (precios por definir: con 0 se muestra "Consultar") ---
+    { categoria: "Mujeres", nombre: "Blower", precio: 0 },
+    { categoria: "Mujeres", nombre: "Planchado", precio: 0 },
+    { categoria: "Mujeres", nombre: "Terapias capilares", precio: 0,
+      descripcion: "Repolarización, hidratación o reconstrucción" },
+    { categoria: "Mujeres", nombre: "Corte de dama", precio: 0,
+      descripcion: "En V, recto u ovalado" },
   ],
 
   // Horario: cada hora desde horaInicio hasta horaFin (formato 24 h).
@@ -52,7 +90,7 @@ const CONFIG = {
   mesesAdelante: 2,
 
   // Texto del pie de página
-  textoHorario: "Lunes a domingo · 9:00 a. m. a 7:00 p. m.",
+  textoHorario: "Lunes a domingo · 9:00 a. m. a 8:00 p. m.",
 };
 
 /* ---------------------------------------------------------
@@ -60,6 +98,7 @@ const CONFIG = {
    --------------------------------------------------------- */
 const estado = {
   barbero: null,    // objeto de CONFIG.barberos
+  categoria: null,  // pestaña de servicios que se está viendo
   servicio: null,   // objeto de CONFIG.servicios
   dia: null,        // Date (a medianoche)
   hora: null,       // número 9..19
@@ -83,6 +122,9 @@ const formatoPrecio = new Intl.NumberFormat("es-CO", {
   style: "currency", currency: "COP", maximumFractionDigits: 0,
 });
 const precio = (n) => formatoPrecio.format(n).replace(/\s/g, "");
+
+// Precio como se ve en la lista: "$30.000", o "Consultar" / "Según valoración" si no hay precio fijo
+const precioTexto = (s) => (s.precio > 0 ? precio(s.precio) : (s.precioTexto || "Consultar"));
 
 // 9 -> "9:00 a. m." · 13 -> "1:00 p. m."
 function textoHora(h) {
@@ -282,6 +324,7 @@ function abrirAgenda(barbero, desplazar) {
   // Si cambia de barbero, empieza la reserva de cero (el nombre se conserva)
   if (estado.barbero !== barbero) {
     estado.barbero = barbero;
+    estado.categoria = null;
     estado.servicio = null;
     estado.dia = null;
     estado.hora = null;
@@ -307,7 +350,7 @@ function abrirAgenda(barbero, desplazar) {
 
   $("#agenda").hidden = false;
 
-  // El link queda listo para compartir: .../imperial-barber/#barbero1
+  // El link queda listo para compartir: .../imperial-barber/#alex
   history.replaceState(null, "", `#${barbero.id}`);
 
   if (desplazar) {
@@ -320,10 +363,31 @@ function abrirAgenda(barbero, desplazar) {
 
 /* --- Servicios --- */
 function pintarServicios() {
+  const pestanas = $("#lista-categorias");
   const lista = $("#lista-servicios");
-  lista.innerHTML = "";
+  if (!estado.categoria) estado.categoria = estado.servicio ? estado.servicio.categoria : CONFIG.categorias[0];
 
-  CONFIG.servicios.forEach((s) => {
+  // Pestañas por tipo de servicio: así el cliente no recorre una lista larga
+  pestanas.innerHTML = "";
+  CONFIG.categorias.forEach((cat) => {
+    const tab = document.createElement("button");
+    tab.type = "button";
+    tab.className = "cat";
+    tab.setAttribute("role", "tab");
+    tab.setAttribute("aria-selected", String(cat === estado.categoria));
+    // Un puntito marca la pestaña donde está el servicio ya elegido
+    if (estado.servicio && estado.servicio.categoria === cat) tab.classList.add("tiene-sel");
+    tab.textContent = cat;
+    tab.addEventListener("click", () => {
+      estado.categoria = cat;
+      pintarServicios();
+    });
+    pestanas.appendChild(tab);
+  });
+
+  // Servicios de la pestaña elegida
+  lista.innerHTML = "";
+  CONFIG.servicios.filter((s) => s.categoria === estado.categoria).forEach((s) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "servicio";
@@ -331,11 +395,14 @@ function pintarServicios() {
     btn.setAttribute("aria-checked", String(estado.servicio === s));
     btn.innerHTML = `
       <span class="servicio__check"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#0B0B0C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="servicio__txt"><span class="servicio__nombre"></span><span class="servicio__dur"></span></span>
+      <span class="servicio__txt"><span class="servicio__nombre"></span><span class="servicio__desc"></span></span>
       <span class="servicio__precio"></span>`;
     btn.querySelector(".servicio__nombre").textContent = s.nombre;
-    btn.querySelector(".servicio__dur").textContent = `${s.duracion} min`;
-    btn.querySelector(".servicio__precio").textContent = precio(s.precio);
+    const desc = btn.querySelector(".servicio__desc");
+    if (s.descripcion) desc.textContent = s.descripcion; else desc.remove();
+    const pr = btn.querySelector(".servicio__precio");
+    pr.textContent = precioTexto(s);
+    if (!(s.precio > 0)) pr.classList.add("sin-precio");
 
     btn.addEventListener("click", () => {
       const primeraVez = !estado.servicio;
@@ -471,7 +538,7 @@ function actualizarResumen() {
   $("#res-dia").textContent = dia ? textoDia(dia) : "—";
   $("#res-hora").textContent = hora !== null ? textoHora(hora) : "—";
   $("#res-nombre").textContent = nombre || "—";
-  $("#res-total").textContent = servicio ? precio(servicio.precio) : "—";
+  $("#res-total").textContent = servicio ? (servicio.precio > 0 ? precio(servicio.precio) : "Por confirmar") : "—";
 
   const faltan = [];
   if (!servicio) faltan.push("servicio");
@@ -492,7 +559,7 @@ function mensajeReserva() {
     ``,
     `• Nombre: ${nombre}`,
     `• Barbero: ${barbero.nombre}`,
-    `• Servicio: ${servicio.nombre} (${precio(servicio.precio)})`,
+    `• Servicio: ${servicio.nombre} (${servicio.precio > 0 ? precio(servicio.precio) : "precio por confirmar"})`,
     `• Día: ${textoDia(dia)}`,
     `• Hora: ${textoHora(hora)}`,
     ``,
@@ -635,8 +702,8 @@ async function iniciar() {
   const barberos = await cargarBarberos();
   pintarBarberos(barberos);
 
-  // Link directo a un barbero: .../imperial-barber/#barbero1
-  // (también acepta el formato anterior #/agenda/barbero1)
+  // Link directo a un barbero: .../imperial-barber/#alex
+  // (también acepta el formato anterior #/agenda/alex)
   const idInicial = location.hash.replace(/^#(\/agenda\/)?/, "");
   const barberoInicial = barberos.find((b) => b.id === idInicial);
   if (barberoInicial) abrirAgenda(barberoInicial, true);

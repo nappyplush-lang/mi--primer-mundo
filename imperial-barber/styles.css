@@ -684,3 +684,61 @@ h1, h2, h3, p { margin: 0; }
 /* --- Mensaje en la zona de barberos (cargando, sin barberos) --- */
 .barberos__estado { grid-column: 1 / -1; padding: 24px 0; color: var(--gris-claro); font-size: 15px; }
 .barberos__estado a { color: var(--dorado); text-decoration: underline; text-underline-offset: 3px; }
+
+/* =========================================================
+   SERVICIOS CON PESTAÑAS
+   ========================================================= */
+.cats {
+  display: flex;
+  gap: 8px;
+  margin: 0 -2px 14px;
+  padding: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cats::-webkit-scrollbar { display: none; }
+.cat {
+  position: relative;
+  flex: none;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: var(--radio-sm);
+  border: 1px solid var(--linea-crema);
+  background: var(--crema-2);
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--gris-oscuro);
+  white-space: nowrap;
+  transition: background .2s, color .2s, border-color .2s;
+}
+@media (hover: hover) { .cat:hover { border-color: #CBBFAE; } }
+.cat[aria-selected="true"] { background: var(--texto-oscuro); border-color: var(--texto-oscuro); color: var(--dorado); }
+/* Puntito dorado: aquí está el servicio que ya elegiste */
+.cat.tiene-sel::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dorado-oscuro);
+}
+.cat[aria-selected="true"].tiene-sel::after { background: var(--dorado); }
+
+.servicio__desc { display: block; margin-top: 2px; font-size: 13px; line-height: 1.35; color: var(--gris-oscuro); }
+.servicio[aria-checked="true"] .servicio__desc { color: #B3AA9E; }
+.servicio__precio.sin-precio { font-size: 13px; font-weight: 500; color: var(--gris-oscuro); text-align: right; max-width: 6.5rem; }
+.servicio[aria-checked="true"] .servicio__precio.sin-precio { color: var(--dorado); }
+
+/* Las pestañas no deben ensanchar la página en el celular */
+@media (max-width: 899px) {
+  .agenda { grid-template-columns: minmax(0, 1fr); }
+}
+.paso, .agenda__col { min-width: 0; }
+.cat { padding: 0 11px; font-size: 14px; }
+.cats { gap: 6px; }
+@media (max-width: 380px) {
+  .cat { padding: 0 9px; font-size: 13px; }
+  .cats { gap: 5px; }
+}
