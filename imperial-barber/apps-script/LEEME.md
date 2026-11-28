@@ -22,7 +22,7 @@ Tendrá 3 pestañas. Las crea el código solo, tú no las armas a mano.
 
 | Pestaña | Para qué sirve | Columnas |
 |---|---|---|
-| **Barberos** | Quién aparece en la página | Nombre · Activo (SÍ o NO) |
+| **Barberos** | Quién aparece en la página y a quién se avisa | Nombre · Activo (SÍ o NO) · Correo |
 | **Citas** | Las reservas. Las llena la página | Fecha · Hora · Barbero · Cliente · Creada en |
 | **Descansos** | Horas o días en que un barbero no atiende | Barbero · Fecha · Hora |
 
@@ -183,27 +183,62 @@ Escribe una fila por cada bloqueo:
 
 ---
 
-## Opcional: que cada cita aparezca en Google Calendar
+## Que al barbero le suene el celular cuando le agendan
 
-La cita se ve en tu celular, con alarma. Si no la quieres, no hagas nada.
+Cada cita nueva puede avisar **al barbero de esa cita**, de dos formas que funcionan juntas:
 
-1. En Google Calendar (https://calendar.google.com), en el panel izquierdo, junto a
-   **Otros calendarios** pulsa **+** → **Crear calendario nuevo**. Ponle de nombre
-   **Citas Imperial Barber** y pulsa **Crear calendario**. (Así no se mezcla con tu
-   calendario personal.)
-2. Pasa el mouse sobre ese calendario, pulsa los tres puntos ⋮ → **Configuración y
-   uso compartido**.
-3. Baja hasta **Integrar el calendario** y copia el **ID de calendario**. Es
-   algo como `abc123@group.calendar.google.com`.
-4. En Apps Script, en `Code.gs`, busca esta línea (cerca del inicio):
-   ```js
-   const ID_CALENDARIO = "";
-   ```
-   Pega el ID entre las comillas y guarda con **Ctrl + S**.
-5. **Publica una versión nueva** (ver la siguiente sección). Sin esto no cambia nada.
-6. Haz una reserva de prueba: debe aparecer el evento, de una hora, con el cliente y el barbero.
+1. **Le llega un correo** con el cliente, el servicio, el día y la hora. Gmail avisa al
+   celular apenas llega, así que **suena**.
+2. **Aparece en Google Calendar.** El evento se crea en el calendario del dueño y, si el
+   correo del barbero es otro, **se le invita** para que le salga en su Calendar con su
+   alarma de **30 minutos antes**.
 
-Si el ID está mal, la cita igual se guarda en la hoja; solo no se crea el evento.
+### Cómo se activa
+
+1. En la hoja, pestaña **Barberos**, escribe el **Gmail del barbero** en la columna
+   **Correo**, en la fila de ese barbero. Si no quieres avisarle a alguien, deja su
+   celda vacía.
+2. **Si ya tenías el código puesto antes**, pega la versión nueva de `Code.gs`
+   (clic en el código, **Ctrl + A**, **Supr**, pegar, **Ctrl + S**). La columna
+   **Correo** se agrega sola a tu hoja.
+3. **Autoriza el permiso nuevo de correo.** En Apps Script elige `configurar` en la lista
+   y pulsa **Ejecutar**. Sale la ventana de permisos: **Revisar permisos** → tu cuenta →
+   **Configuración avanzada** → **Ir a Proyecto sin título (no seguro)** → **Permitir**.
+4. **Publica una versión nueva** (ver la siguiente sección).
+5. Haz una reserva de prueba: al Gmail del barbero debe llegar un correo
+   "Nueva cita: …".
+
+### Lo que debe tener el barbero en su celular
+
+- La app **Gmail**, con las **notificaciones activadas**. Así le suena al llegar el aviso.
+- La app **Google Calendar**, con una alarma de **30 minutos antes**: **Configuración →
+  su calendario → Notificaciones de eventos → Agregar notificación**.
+- Para que el evento le aparezca **solo** en su Calendar, en la **Configuración general**
+  de Calendar: **Agregar invitaciones a mi calendario → Todas las invitaciones**.
+  Con "Solo si el remitente es conocido" la invitación llega por correo, pero él tiene
+  que abrirla.
+
+### Si el barbero es el mismo dueño de la hoja
+
+Google no se invita a sí mismo, así que no recibe una invitación. Igual le llega el
+**correo de aviso** y el evento aparece directamente en su calendario.
+
+### Calendario aparte, opcional
+
+Por defecto el evento va a tu calendario principal. Si prefieres uno aparte para las citas:
+1. En Google Calendar, junto a **Otros calendarios** pulsa **+** → **Crear calendario
+   nuevo**. Ponle `Citas Imperial Barber`.
+2. En su configuración, **Integrar el calendario**, copia el **ID de calendario**.
+3. En `Code.gs`, pégalo entre las comillas de `const ID_CALENDARIO = "";` y publica una
+   versión nueva.
+
+### Para apagar los avisos
+
+- **Correo:** en `Code.gs`, cambia `AVISAR_POR_CORREO = true` por `false`.
+- **Todo:** deja vacía la columna **Correo** y también `ID_CALENDARIO`.
+
+Si algo falla (un correo mal escrito, un permiso sin dar), la **cita igual queda
+guardada** en la hoja. Solo no se envía el aviso.
 
 ---
 
@@ -233,6 +268,7 @@ link distinto y tendrías que cambiarlo en `script.js`.
 | El link pide iniciar sesión | Paso 6.3: **Quién tiene acceso** debe ser **Cualquier persona**. |
 | Cambié el código y no pasa nada | Publica una versión nueva (ver arriba). |
 | Un Descanso no bloquea nada | El barbero y la fecha deben estar bien escritos. Usa la lista desplegable del barbero. |
+| No le llega el correo al barbero | Revisa que su correo esté bien escrito en **Barberos**, que hayas dado el permiso de correo (paso 3 de arriba) y que hayas publicado una versión nueva. Mira también su carpeta de spam. |
 | La página dice "No pudimos guardar la cita" | La hoja no respondió. La cita llega por WhatsApp igual; anótala a mano. |
 | Error al ejecutar `configurar`: "pestaña Citas es de una versión anterior" | Cámbiale el nombre a esa pestaña (por ejemplo "Citas vieja") y ejecuta `configurar` otra vez. |
 
@@ -244,7 +280,9 @@ link distinto y tendrías que cambiarlo en `script.js`.
 - **Solo se guarda el nombre**, no el teléfono. El teléfono lo ves cuando el cliente
   te escribe por WhatsApp.
 - **El servicio y el precio no se guardan en la hoja**: llegan en el mensaje de
-  WhatsApp (y en el evento de Calendar, si lo activas).
+  WhatsApp y, si activas los avisos, en el correo y en el evento de Calendar.
+- **Límite de correos:** una cuenta gratuita de Google puede mandar unos 100 correos al
+  día desde un script. Para una barbería sobra.
 - **Una cita sin WhatsApp también bloquea la hora:** si alguien confirma pero no manda
   el mensaje, la hora queda tomada. Libérala borrando la fila.
 - **Citas falsas:** quien tenga conocimientos técnicos podría usar el link para meter

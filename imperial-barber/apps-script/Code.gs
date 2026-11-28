@@ -4,8 +4,10 @@
 
    La hoja tiene 3 pestañas (se crean solas al ejecutar "configurar"):
 
-   - Barberos   Nombre | Activo (SÍ o NO)
+   - Barberos   Nombre | Activo (SÍ o NO) | Correo
                 Un barbero en NO desaparece de la página.
+                Con un Correo, cada cita nueva le llega a ese barbero por email
+                (y le suena el celular si tiene Gmail con notificaciones).
    - Citas      Fecha | Hora | Barbero | Cliente | Creada en
                 Las llena la página. Para cancelar una cita, borra su fila:
                 esa hora vuelve a quedar libre.
@@ -46,6 +48,13 @@ const ID_CALENDARIO = "";
 
 // Duración del evento en Calendar, en minutos
 const DURACION_MIN = 60;
+
+// Avisar al barbero por correo cada vez que le agendan una cita (usa la columna
+// "Correo" de la pestaña Barberos). Pon false para desactivarlo.
+const AVISAR_POR_CORREO = true;
+
+// Nombre que ve el barbero como remitente del correo
+const NOMBRE_NEGOCIO = "Imperial Barber";
 
 /* ---------------------------------------------------------
    Nombres de las pestañas (no los cambies)
@@ -146,28 +155,68 @@ function crearCita(c) {
   ]);
   SpreadsheetApp.flush(); // asegura que quede escrita antes de soltar el candado
 
-  crearEventoCalendario(barbero.nombre, fecha, hora, nombre, servicio);
+  // Los avisos son un extra: si fallan, la cita ya quedó guardada y no se pierde
+  crearEventoCalendario(barbero, fecha, hora, nombre, servicio);
+  avisarBarbero(barbero, fecha, hora, nombre, servicio);
   return { ok: true };
 }
 
-// Crea el evento en Google Calendar (solo si pusiste ID_CALENDARIO).
-// Si falla, la cita ya quedó guardada en la hoja: el error solo se anota en el registro.
+// Crea el evento en Google Calendar. Va al calendario de ID_CALENDARIO; si lo dejaste
+// vacío pero el barbero tiene Correo, va a tu calendario principal. Si el barbero tiene
+// un Correo distinto al dueño del calendario, se le invita para que le aparezca en su
+// Calendar con su alarma. Si falla, la cita ya quedó guardada: el error solo se anota.
 function crearEventoCalendario(barbero, fecha, hora, nombre, servicio) {
-  if (!ID_CALENDARIO) return;
+  if (!ID_CALENDARIO && !esCorreo(barbero.correo)) return;
   try {
-    const calendario = CalendarApp.getCalendarById(ID_CALENDARIO);
+    const calendario = ID_CALENDARIO ? CalendarApp.getCalendarById(ID_CALENDARIO) : CalendarApp.getDefaultCalendar();
     if (!calendario) {
       console.error("No se encontró un calendario con el ID: " + ID_CALENDARIO);
       return;
     }
     const inicio = Utilities.parseDate(fecha + " " + pad2(hora) + ":00", ZONA, "yyyy-MM-dd HH:mm");
     const fin = new Date(inicio.getTime() + DURACION_MIN * 60000);
-    calendario.createEvent((servicio || "Cita") + " · " + nombre + " (" + barbero + ")", inicio, fin, {
-      description: "Barbero: " + barbero + "\nCliente: " + nombre + (servicio ? "\nServicio: " + servicio : "") +
+    const titulo = (servicio || "Cita") + " · " + nombre + " (" + barbero.nombre + ")";
+    const opciones = {
+      description: "Barbero: " + barbero.nombre + "\nCliente: " + nombre + (servicio ? "\nServicio: " + servicio : "") +
         "\nReservada desde la página web",
-    });
+    };
+
+    // Invitar al barbero solo si su correo no es el del propio calendario (Google no se invita a sí mismo)
+    const invitar = esCorreo(barbero.correo) && norm(barbero.correo) !== norm(calendario.getId());
+    if (invitar) {
+      try {
+        calendario.createEvent(titulo, inicio, fin, Object.assign({ guests: barbero.correo, sendInvites: true }, opciones));
+        return;
+      } catch (err) {
+        console.error("No se pudo invitar a " + barbero.correo + ", se crea el evento sin invitación: " + err);
+      }
+    }
+    calendario.createEvent(titulo, inicio, fin, opciones);
   } catch (err) {
     console.error("No se pudo crear el evento en Calendar: " + err);
+  }
+}
+
+// Manda un correo al barbero con los datos de la cita. Gmail avisa al celular apenas llega.
+// Si falla (por ejemplo, falta autorizar el permiso de correo), la cita igual queda guardada.
+function avisarBarbero(barbero, fecha, hora, nombre, servicio) {
+  if (!AVISAR_POR_CORREO || !esCorreo(barbero.correo)) return;
+  try {
+    MailApp.sendEmail({
+      to: barbero.correo,
+      name: NOMBRE_NEGOCIO,
+      subject: "Nueva cita: " + fecha + " " + etiquetaHora(hora) + " · " + nombre,
+      body: "Tienes una cita nueva.\n\n" +
+        "Cliente: " + nombre + "\n" +
+        (servicio ? "Servicio: " + servicio + "\n" : "") +
+        "Día: " + fecha + "\n" +
+        "Hora: " + etiquetaHora(hora) + "\n" +
+        "Barbero: " + barbero.nombre + "\n\n" +
+        "Reservada desde la página web de " + NOMBRE_NEGOCIO + ".\n" +
+        "Para cancelarla, borra su fila en la pestaña Citas de la hoja.",
+    });
+  } catch (err) {
+    console.error("No se pudo mandar el correo a " + barbero.correo + ": " + err);
   }
 }
 
@@ -177,8 +226,14 @@ function crearEventoCalendario(barbero, fecha, hora, nombre, servicio) {
 
 // Barberos de la pestaña "Barberos" con Activo = SÍ
 function barberosActivos() {
-  return filas(hojas().barberos, 2)
-    .map(function (f) { return { nombre: String(f[0] == null ? "" : f[0]).replace(/\s+/g, " ").trim(), activo: esSi(f[1]) }; })
+  return filas(hojas().barberos, 3)
+    .map(function (f) {
+      return {
+        nombre: String(f[0] == null ? "" : f[0]).replace(/\s+/g, " ").trim(),
+        activo: esSi(f[1]),
+        correo: String(f[2] == null ? "" : f[2]).trim(),
+      };
+    })
     .filter(function (b) { return b.nombre && b.activo; });
 }
 
@@ -250,6 +305,7 @@ function asegurarHojas() {
   let citas = libro.getSheetByName(HOJA_CITAS);
   let descansos = libro.getSheetByName(HOJA_DESCANSOS);
   comprobarCitas(citas);
+  completarBarberos(barberos);
   if (barberos && citas && descansos) return { libro: libro, barberos: barberos, citas: citas, descansos: descansos };
 
   // Misma zona horaria en toda la hoja, para que las fechas no se corran un día
@@ -283,6 +339,16 @@ function comprobarCitas(citas) {
   }
 }
 
+// Las hojas creadas con una versión anterior no tienen la columna "Correo": se agrega sola
+function completarBarberos(barberos) {
+  if (barberos && barberos.getLastRow() > 0 && esVacio(barberos.getRange(1, 3).getValue())) {
+    barberos.getRange(1, 3).setValue("Correo")
+      .setFontWeight("bold").setBackground("#0B0B0C").setFontColor("#C8A97E");
+    barberos.getRange("C1").setNote("Correo del barbero. Le llega un aviso por cada cita nueva. Déjalo vacío para no avisarle.");
+    barberos.setColumnWidth(3, 240);
+  }
+}
+
 function titulos(hoja, lista) {
   hoja.getRange(1, 1, 1, lista.length).setValues([lista])
     .setFontWeight("bold").setBackground("#0B0B0C").setFontColor("#C8A97E");
@@ -290,14 +356,16 @@ function titulos(hoja, lista) {
 }
 
 function prepararBarberos(hoja) {
-  titulos(hoja, ["Nombre", "Activo"]);
-  hoja.getRange(2, 1, BARBEROS_INICIALES.length, 2).setValues(BARBEROS_INICIALES.map(function (n) { return [n, "SÍ"]; }));
+  titulos(hoja, ["Nombre", "Activo", "Correo"]);
+  hoja.getRange(2, 1, BARBEROS_INICIALES.length, 3).setValues(BARBEROS_INICIALES.map(function (n) { return [n, "SÍ", ""]; }));
   hoja.getRange("B2:B").setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(["SÍ", "NO"], true).setAllowInvalid(false).build());
   hoja.getRange("A1").setNote("El nombre debe ser igual al de CONFIG.barberos en script.js.");
   hoja.getRange("B1").setNote("SÍ = aparece en la página. NO = desaparece.");
+  hoja.getRange("C1").setNote("Correo del barbero. Le llega un aviso por cada cita nueva. Déjalo vacío para no avisarle.");
   hoja.setColumnWidth(1, 200);
   hoja.setColumnWidth(2, 90);
+  hoja.setColumnWidth(3, 240);
 }
 
 function prepararCitas(hoja) {
@@ -362,6 +430,10 @@ function norm(texto) {
 
 function esVacio(v) {
   return v === "" || v === null || v === undefined || (typeof v === "string" && v.trim() === "");
+}
+
+function esCorreo(t) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(t || "").trim());
 }
 
 function esSi(v) {
